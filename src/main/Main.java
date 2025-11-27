@@ -1,13 +1,30 @@
 package main;
 
-public class Main {
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import view.CustomerHomePage;
+import view.GuestHomePage;
 
-	public Main() {
-		System.out.println("test");
+public class Main extends Application {
+
+	private static Stage stg;
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		stg = primaryStage;
+		primaryStage.setTitle("JoymarKet");
+		
+		//start di GuestHomePage
+		primaryStage.setScene(new Scene(new GuestHomePage(), 800, 600));
+		primaryStage.show();
+	}
+
+	public static void changeScene(Scene scene) {
+		stg.setScene(scene);
 	}
 
 	public static void main(String[] args) {
-		new Main();
+		launch(args);
 	}
-
 }

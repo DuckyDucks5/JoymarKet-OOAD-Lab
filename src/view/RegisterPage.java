@@ -1,10 +1,9 @@
 package view;
 
+import controller.AuthenticationController;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import model.Customer;
-import repository.UserRepo;
 
 public class RegisterPage extends GridPane {
 
@@ -35,15 +34,6 @@ public class RegisterPage extends GridPane {
 		TextArea addressTa = new TextArea();
 		addressTa.setPrefRowCount(2);
 
-		Label genderLbl = new Label("Gender");
-		RadioButton rbMale = new RadioButton("Male");
-		RadioButton rbFemale = new RadioButton("Female");
-		ToggleGroup tg = new ToggleGroup();
-		rbMale.setToggleGroup(tg);
-		rbFemale.setToggleGroup(tg);
-
-		HBox genderBox = new HBox(12, rbMale, rbFemale);
-
 		Button submitBtn = new Button("Submit");
 
 		this.add(title, 0, 0, 2, 1);
@@ -59,84 +49,30 @@ public class RegisterPage extends GridPane {
 		this.add(phoneTf, 1, 5);
 		this.add(addressLbl, 0, 6);
 		this.add(addressTa, 1, 6);
-		this.add(genderLbl, 0, 7);
-		this.add(genderBox, 1, 7);
-		this.add(submitBtn, 1, 9);
+		this.add(submitBtn, 1, 8);
 
 		GridPane.setHalignment(title, javafx.geometry.HPos.CENTER);
 
 		submitBtn.setOnAction(e -> {
-			String errors = validate(nameTf.getText(), emailTf.getText(), passPf.getText(), confirmPf.getText(),
-					phoneTf.getText(), addressTa.getText(), tg.getSelectedToggle());
+			AuthenticationController controller = new AuthenticationController();
+			String result = controller.registerCustomerWithValidation(nameTf.getText(), emailTf.getText(),
+					passPf.getText(), confirmPf.getText(), phoneTf.getText(), addressTa.getText());
 
-			if (!errors.isEmpty()) {
-				Alert a = new Alert(Alert.AlertType.ERROR);
-				a.setHeaderText("Registration Failed");
-				a.setContentText(errors);
-				a.show();
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setHeaderText(null);
+
+			if ("SUCCESS".equals(result)) {
+				alert.setAlertType(Alert.AlertType.INFORMATION);
+				alert.setHeaderText("Success");
+				alert.setContentText("Account created successfully!");
+				alert.showAndWait();
+				getScene().setRoot(new LoginPage());
 			} else {
-				String fullname = nameTf.getText();
-				String email = emailTf.getText();
-				String password = passPf.getText();
-				String phone = phoneTf.getText();
-				String address = addressTa.getText();
-				double balance = 0; // default saldo awal
-
-				UserRepo repo = new UserRepo();
-
-				String newId = repo.generateCustomerID();
-				Customer tempCustomer = new Customer(newId, fullname, email, password, phone, address, balance);
-				Customer registered = repo.registerCustomer(tempCustomer);
-
-				if (registered != null) {
-					Alert a = new Alert(Alert.AlertType.INFORMATION);
-					a.setHeaderText("Success");
-					a.setContentText("Account created successfully!");
-					a.showAndWait();
-					getScene().setRoot(new LoginPage());
-				} else {
-					Alert a = new Alert(Alert.AlertType.ERROR);
-					a.setHeaderText("Registration Failed");
-					a.setContentText("Something went wrong while creating your account.");
-					a.show();
-				}
+				alert.setAlertType(Alert.AlertType.ERROR);
+				alert.setHeaderText("Registration Failed");
+				alert.setContentText(result);
+				alert.showAndWait();
 			}
 		});
 	}
-
-	private String validate(String name, String email, String pass, String confirm, String phone, String address,
-			Toggle gender) {
-		StringBuilder sb = new StringBuilder();
-
-		if (name.isEmpty())
-			sb.append("- Full Name cannot be empty.\n");
-
-		if (email.isEmpty())
-			sb.append("- Email must be filled.\n");
-		else if (!email.endsWith("@gmail.com"))
-			sb.append("- Email must end with @gmail.com.\n");
-
-		if (pass.length() < 6)
-			sb.append("- Password must be at least 6 characters.\n");
-		if (!pass.equals(confirm))
-			sb.append("- Confirm password must match Password.\n");
-
-		if (phone.isEmpty())
-			sb.append("- Phone must be filled.\n");
-		else {
-			if (!phone.matches("\\d+"))
-				sb.append("- Phone must be numeric.\n");
-			if (phone.length() < 10 || phone.length() > 13)
-				sb.append("- Phone must be 10–13 digits.\n");
-		}
-
-		if (address.isEmpty())
-			sb.append("- Address must be filled.\n");
-
-		if (gender == null)
-			sb.append("- Gender must be chosen.\n");
-
-		return sb.toString();
-	}
-
 }

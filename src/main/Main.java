@@ -3,7 +3,6 @@ package main;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import view.CustomerHomePage;
 import view.GuestHomePage;
 
 public class Main extends Application {

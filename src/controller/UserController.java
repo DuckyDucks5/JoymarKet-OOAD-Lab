@@ -1,16 +1,12 @@
-package repository;
+package controller;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
-
-import model.Admin;
 import model.Customer;
-import model.User;
 import utils.Connect;
 
-public class UserRepo {
+public class UserController {
 	private Connection conn = Connect.getInstance().getConn();
 
 	public Customer registerCustomer(Customer customer) {
@@ -69,40 +65,6 @@ public class UserRepo {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
-	}
-
-	public User login(String email, String password) {
-		try {
-			String query = "SELECT * FROM users WHERE email = ? AND password = ?";
-			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setString(1, email);
-			ps.setString(2, password);
-
-			ResultSet rs = ps.executeQuery();
-
-			if (rs.next()) {
-
-				String id = rs.getString("idUser");
-				String fullname = rs.getString("fullName");
-				String phone = rs.getString("phone");
-				String address = rs.getString("address");
-				String role = rs.getString("role");
-
-				double balance = rs.getDouble("balance");
-				String emergency = rs.getString("emergencyContact");
-
-				if (role.equalsIgnoreCase("admin")) {
-					return new Admin(id, fullname, email, password, phone, address, emergency);
-				} else {
-					return new Customer(id, fullname, email, password, phone, address, balance);
-				}
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		return null;
 	}
 

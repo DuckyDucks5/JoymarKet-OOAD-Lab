@@ -1,6 +1,6 @@
 package view;
 
-import controller.UserController;
+import controller.UserHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -54,7 +54,7 @@ public class RegisterPage extends GridPane {
 		GridPane.setHalignment(title, javafx.geometry.HPos.CENTER);
 
 		submitBtn.setOnAction(e -> {
-			UserController controller = new UserController();
+			UserHandler controller = new UserHandler();
             String result = controller.registerAccount(
                     nameTf.getText(),
                     emailTf.getText(),

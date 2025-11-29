@@ -1,6 +1,6 @@
 package view;
 
-import controller.UserController;
+import controller.UserHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.HPos;
 import javafx.scene.control.Alert;
@@ -54,7 +54,7 @@ public class LoginPage extends GridPane {
                 return;
             }
 
-            UserController controller = new UserController();
+            UserHandler controller = new UserHandler();
             User loggedIn = controller.login(email, pass);
 
             if (loggedIn == null) {

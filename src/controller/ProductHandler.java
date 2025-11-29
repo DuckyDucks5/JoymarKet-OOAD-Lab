@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import model.Product;
 import utils.Connect;
 
-public class ProductController {
+public class ProductHandler {
 	private Connection conn = Connect.getInstance().getConn();
 	
 	public ArrayList<Product> getAllProduct() {

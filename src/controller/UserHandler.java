@@ -4,7 +4,7 @@ import repository.UserDA;
 import model.Customer;
 import model.User;
 
-public class UserController {
+public class UserHandler {
 
 	private UserDA userRepo = new UserDA();
 

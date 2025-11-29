@@ -3,7 +3,7 @@ package controller;
 import model.Customer;
 import repository.CustomerDA;
 
-public class CustomerController {
+public class CustomerHandler {
 
     public String topUpBalance(Customer customer, double amount) {
         String result = customer.topUpBalance(amount);

@@ -1,6 +1,6 @@
 package view;
 
-import controller.CustomerController;
+import controller.CustomerHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -49,7 +49,7 @@ public class TopUpPage extends GridPane {
 				return;
 			}
 
-			CustomerController controller = new CustomerController();
+			CustomerHandler controller = new CustomerHandler();
 			String result = controller.topUpBalance(customer, amount);
 
 			if ("SUCCESS".equals(result)) {

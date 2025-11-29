@@ -1,13 +1,13 @@
 package model;
 
 public class User {
-	protected String idUser;
-	protected String fullName;
-	protected String email;
-	protected String password;
-	protected String phone;
-	protected String address;
-	protected String role;
+	private String idUser;
+	private String fullName;
+	private String email;
+	private String password;
+	private String phone;
+	private String address;
+	private String role;
 
 	public User(String idUser, String fullName, String email, String password, String phone, String address, String role) {
 		super();

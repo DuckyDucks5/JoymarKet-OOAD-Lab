@@ -1,6 +1,6 @@
 package view;
 
-import controller.AuthenticationController;
+import controller.UserController;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -54,25 +54,31 @@ public class RegisterPage extends GridPane {
 		GridPane.setHalignment(title, javafx.geometry.HPos.CENTER);
 
 		submitBtn.setOnAction(e -> {
-			AuthenticationController controller = new AuthenticationController();
-			String result = controller.registerCustomerWithValidation(nameTf.getText(), emailTf.getText(),
-					passPf.getText(), confirmPf.getText(), phoneTf.getText(), addressTa.getText());
+			UserController controller = new UserController();
+            String result = controller.registerAccount(
+                    nameTf.getText(),
+                    emailTf.getText(),
+                    passPf.getText(),
+                    confirmPf.getText(),
+                    phoneTf.getText(),
+                    addressTa.getText()
+            );
 
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setHeaderText(null);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
 
-			if ("SUCCESS".equals(result)) {
-				alert.setAlertType(Alert.AlertType.INFORMATION);
-				alert.setHeaderText("Success");
-				alert.setContentText("Account created successfully!");
-				alert.showAndWait();
-				getScene().setRoot(new LoginPage());
-			} else {
-				alert.setAlertType(Alert.AlertType.ERROR);
-				alert.setHeaderText("Registration Failed");
-				alert.setContentText(result);
-				alert.showAndWait();
-			}
+            if ("SUCCESS".equals(result)) {
+                alert.setAlertType(Alert.AlertType.INFORMATION);
+                alert.setHeaderText("Success");
+                alert.setContentText("Account created successfully!");
+                alert.showAndWait();
+                getScene().setRoot(new LoginPage());
+            } else {
+                alert.setAlertType(Alert.AlertType.ERROR);
+                alert.setHeaderText("Registration Failed");
+                alert.setContentText(result);
+                alert.showAndWait();
+            }
 		});
 	}
 }

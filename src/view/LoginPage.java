@@ -1,6 +1,6 @@
 package view;
 
-import controller.AuthenticationController;
+import controller.UserController;
 import javafx.geometry.Insets;
 import javafx.geometry.HPos;
 import javafx.scene.control.Alert;
@@ -47,29 +47,29 @@ public class LoginPage extends GridPane {
 
 		loginBtn.setOnAction(e -> {
 			String email = usernameTf.getText().trim();
-			String pass = passwordPf.getText().trim();
+            String pass = passwordPf.getText().trim();
 
-			if (email.isEmpty() || pass.isEmpty()) {
-				showAlert("Error", "Email and password cannot be empty!", AlertType.ERROR);
-				return;
-			}
+            if (email.isEmpty() || pass.isEmpty()) {
+                showAlert("Error", "Email and password cannot be empty!", AlertType.ERROR);
+                return;
+            }
 
-			AuthenticationController controller = new AuthenticationController();
-			User loggedIn = controller.login(email, pass);
+            UserController controller = new UserController();
+            User loggedIn = controller.login(email, pass);
 
-			if (loggedIn == null) {
-				showAlert("Login Failed", "Incorrect email or password.", AlertType.ERROR);
-				return;
-			}
+            if (loggedIn == null) {
+                showAlert("Login Failed", "Incorrect email or password.", AlertType.ERROR);
+                return;
+            }
 
-			if (loggedIn instanceof Admin) {
-				showAlert("Success", "Logged in as Admin!", AlertType.INFORMATION);
-				getScene().setRoot(new AdminHomePage());
-			} else if (loggedIn instanceof Customer) {
-				showAlert("Success", "Logged in as Customer!", AlertType.INFORMATION);
-				Customer loggedInCustomer = (Customer) loggedIn;
-				getScene().setRoot(new CustomerHomePage(loggedInCustomer));
-			}
+            if (loggedIn instanceof Admin) {
+                showAlert("Success", "Logged in as Admin!", AlertType.INFORMATION);
+                getScene().setRoot(new AdminHomePage());
+            } 
+            else if (loggedIn instanceof Customer) {
+                showAlert("Success", "Logged in as Customer!", AlertType.INFORMATION);
+                getScene().setRoot(new CustomerHomePage((Customer) loggedIn));
+            }
 		});
 	}
 

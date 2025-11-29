@@ -1,84 +1,76 @@
 package controller;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import repository.UserDA;
 import model.Customer;
-import utils.Connect;
+import model.User;
 
 public class UserController {
-	private Connection conn = Connect.getInstance().getConn();
 
-	public Customer registerCustomer(Customer customer) {
-		try {
-			String newId = generateCustomerID();
-			customer.setIdUser(newId);
+	private UserDA userRepo = new UserDA();
 
-			String query = "INSERT INTO users (idUser, fullName, email, password, phone, address, balance, role) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-			PreparedStatement ps = conn.prepareStatement(query);
+	public String registerAccount(String fullname, String email, String password, String confirm, String phone, String address){
+		StringBuilder sb = new StringBuilder();
 
-			ps.setString(1, customer.getIdUser());
-			ps.setString(2, customer.getFullname());
-			ps.setString(3, customer.getEmail());
-			ps.setString(4, customer.getPassword());
-			ps.setString(5, customer.getPhone());
-			ps.setString(6, customer.getAddress());
-			ps.setDouble(7, customer.getBalance());
-			ps.setString(8, "customer");
+		if (fullname.isEmpty())
+			sb.append("- Full Name cannot be empty.\n");
 
-			int affected = ps.executeUpdate();
-			if (affected == 0)
-				return null;
-
-			return new Customer(newId, customer.getFullname(), customer.getEmail(), customer.getPassword(),
-					customer.getPhone(), customer.getAddress(), customer.getBalance());
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+		if (email.isEmpty()) {
+			sb.append("- Email must be filled.\n");
+		} else if (!email.endsWith("@gmail.com")) {
+			sb.append("- Email must end with @gmail.com.\n");
 		}
 
-	}
+		if (password.length() < 6) {
+			sb.append("- Password must be at least 6 characters.\n");
+		}
+		if (!password.equals(confirm)) {
+			sb.append("- Confirm password must match Password.\n");
+		}
 
-	public String generateCustomerID() {
-		try {
-			String lastId = null;
-			int num = 1;
-
-			while (true) {
-				String query = "SELECT idUser FROM users WHERE idUser = ?";
-				PreparedStatement ps = conn.prepareStatement(query);
-
-				if (lastId == null) {
-					ps.setString(1, "CU" + String.format("%03d", num));
-				} else {
-					ps.setString(1, lastId);
-				}
-				ResultSet rs = ps.executeQuery();
-				if (!rs.next()) {
-					return "CU" + String.format("%03d", num);
-				}
-				num++;
-				lastId = "CU" + String.format("%03d", num);
+		if (phone.isEmpty()) {
+			sb.append("- Phone number must be filled.\n");
+		} else {
+			if (!phone.matches("\\d+")) {
+				sb.append("- Phone number must be numeric.\n");
 			}
+			if (phone.length() < 10 || phone.length() > 13) {
+				sb.append("- Phone number must be 10–13 digits.\n");
+			}
+		}
+
+		if (address.isEmpty()) {
+			sb.append("- Address must be filled.\n");
+		}
+
+		if (sb.length() > 0) {
+			return sb.toString();
+		}
+
+		try {
+			String newId = userRepo.generateCustomerID();
+			Customer customer = new Customer(newId, fullname, email, password, phone, address, 0);
+
+			Customer saved = userRepo.insertCustomer(customer);
+			if (saved != null) {
+			    return "SUCCESS";
+			} else {
+			    return "Error while creating account.";
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
+			return "Error: " + e.getMessage();
 		}
-		return null;
 	}
 
-	public boolean updateBalance(String idUser, double newBalance) {
-		try {
-			String query = "UPDATE users SET balance = ? WHERE idUser = ?";
-			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setDouble(1, newBalance);
-			ps.setString(2, idUser);
-			int affected = ps.executeUpdate();
-			return affected > 0;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
+	public User login(String email, String password) {
+		if (email.isBlank() || password.isBlank())
+			return null;
+
+		return userRepo.findByEmailAndPassword(email, password);
+	}
+
+	public boolean updateBalance(String idUser, double balance) {
+		return userRepo.updateBalance(idUser, balance);
 	}
 }

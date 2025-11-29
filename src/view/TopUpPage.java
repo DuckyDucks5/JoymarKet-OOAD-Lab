@@ -50,7 +50,7 @@ public class TopUpPage extends GridPane {
 			}
 
 			CustomerController controller = new CustomerController();
-			String result = controller.topUp(customer, amount);
+			String result = controller.topUpBalance(customer, amount);
 
 			if ("SUCCESS".equals(result)) {
 				balanceLbl.setText("Current Balance: " + customer.getBalance());

@@ -33,7 +33,7 @@ public class CustomerHomePage extends BorderPane {
 		this.setCenter(title);
 
 		productListBtn.setOnAction(e -> {
-//	           this.setCenter(new ProductListPage());
+//	          this.setCenter(new ProductListPage());
 		});
 
 		cartBtn.setOnAction(e -> {

@@ -25,9 +25,11 @@ public class AdminHomePage extends BorderPane {
 
 	       this.setTop(navBar);
 	       this.setCenter(title);
+	       
+	       
 
 	       productListCRUDBtn.setOnAction(e -> {
-//	           this.getScene().setRoot(new ProductListPage());
+	           this.getScene().setRoot(new ProductListPage());
 	       });
 
 	        courirPageBtn.setOnAction(e -> {

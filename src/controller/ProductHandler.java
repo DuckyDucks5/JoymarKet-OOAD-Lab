@@ -8,33 +8,25 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import model.Product;
+import repository.ProductDA;
 import utils.Connect;
 
 public class ProductHandler {
-	private Connection conn = Connect.getInstance().getConn();
+	private ProductDA productDA = new ProductDA();
 	
-	public ArrayList<Product> getAllProduct() {
-		ArrayList<Product> products = new ArrayList<>();
-		String query = "SELECT * FROM product";
-		
-		try {
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery(query);
-			while(rs.next()) {
-				String idProduct = rs.getString("idProduct");
-				String name = rs.getString("name");
-				double price = rs.getDouble("price");
-				int stock = rs.getInt("stock");
-				String category = rs.getString("category");
-				products.add(new Product(idProduct, name, price, stock, category));
-			}
-			
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return products;
-		
+	public ArrayList<Product> getAllProducts() {
+		return productDA.getAllProducts();
+	}
+	
+	public Product getProduct(String idProduct) {
+		return productDA.getProduct(idProduct);
+	}
+	
+	public boolean editProductStock(String idProduct, int newStock) {
+		return productDA.editProductStock(idProduct, newStock);
+	}
+	
+	public ArrayList<Product> getAvailableProducts(){
+		return productDA.getAvailableProducts();
 	}
 }

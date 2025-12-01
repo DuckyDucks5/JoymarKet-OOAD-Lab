@@ -11,6 +11,23 @@ public class Courier extends User{
 		this.vehicleType = vehicleType;
 		this.vehiclePlate = vehiclePlate;
 	}
+
+	public String getVehicleType() {
+		return vehicleType;
+	}
+
+	public void setVehicleType(String vehicleType) {
+		this.vehicleType = vehicleType;
+	}
+
+	public String getVehiclePlate() {
+		return vehiclePlate;
+	}
+
+	public void setVehiclePlate(String vehiclePlate) {
+		this.vehiclePlate = vehiclePlate;
+	}
+	
 	
 
 	

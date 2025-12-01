@@ -29,11 +29,12 @@ public class AdminHomePage extends BorderPane {
 	       
 
 	       productListCRUDBtn.setOnAction(e -> {
-	           this.getScene().setRoot(new ProductListPage());
+	           this.setCenter(new ProductListPage());
 	       });
 
 	        courirPageBtn.setOnAction(e -> {
 //	            this.getScene().setRoot(new CourirPage());
+	        	this.setCenter(new CourierListPage());
 	        });
 	        
 	        orderPageBtn.setOnAction(e -> {

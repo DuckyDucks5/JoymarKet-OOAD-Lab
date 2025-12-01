@@ -15,7 +15,7 @@ public class CourierDA {
 	public ArrayList<Courier> getAllCouriers(){
 		ArrayList<Courier> couriers = new ArrayList<>();
 		
-		String query = "SELECT * FROM user WHERE idUser LIKE ? AND role = ?";
+		String query = "SELECT * FROM users WHERE idUser LIKE ? AND role = ?";
 		
 		try {
 			PreparedStatement ps = conn.prepareStatement(query);

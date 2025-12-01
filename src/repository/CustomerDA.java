@@ -17,6 +17,24 @@ public class CustomerDA {
             ps.setString(2, customer.getIdUser());
 
             return ps.executeUpdate() > 0;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean updateProfileDA(Customer customer) {
+        try {
+            String query = "UPDATE users SET fullName = ?, phone = ?, address = ? WHERE idUser = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, customer.getFullname());
+            ps.setString(2, customer.getPhone());
+            ps.setString(3, customer.getAddress());
+            ps.setString(4, customer.getIdUser());
+
+            return ps.executeUpdate() > 0;
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;

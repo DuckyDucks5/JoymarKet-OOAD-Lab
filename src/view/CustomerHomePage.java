@@ -53,7 +53,7 @@ public class CustomerHomePage extends BorderPane {
 		});
 
 		editProfileBtn.setOnAction(e -> {
-//	        	this.setCenter(new EditProfilePage());
+	        this.setCenter(new EditProfilePage(customer));
 		});
 	}
 }

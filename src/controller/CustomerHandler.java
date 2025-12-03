@@ -46,7 +46,7 @@ public class CustomerHandler {
 			}
 
 			if (phone.length() < 10 || phone.length() > 13) {
-				sb.append("Phone must be 10–13 digits!\n");
+				sb.append("Phone must be 10ï¿½13 digits!\n");
 			}
 		}
 
@@ -66,5 +66,19 @@ public class CustomerHandler {
 			return "SUCCESS";
 
 		return "Failed to update profile!";
+	}
+	
+	//kurangi balance apabila checkout product
+	public String reduceBalance(Customer customer, double amount) {
+		
+		customer.setBalance(customer.getBalance() - amount);
+
+		boolean saved = da.saveDA(customer);
+
+		if (saved) {
+			return "SUCCESS";
+		} else {
+			return "Failed to update balance!";
+		}
 	}
 }

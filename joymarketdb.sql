@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 01, 2025 at 02:29 AM
+-- Generation Time: Dec 03, 2025 at 07:20 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,6 +24,69 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cart_item`
+--
+
+CREATE TABLE `cart_item` (
+  `idCustomer` varchar(255) NOT NULL,
+  `idProduct` varchar(255) NOT NULL,
+  `count` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_detail`
+--
+
+CREATE TABLE `order_detail` (
+  `idOrder` varchar(50) NOT NULL,
+  `idProduct` varchar(50) NOT NULL,
+  `qty` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_detail`
+--
+
+INSERT INTO `order_detail` (`idOrder`, `idProduct`, `qty`) VALUES
+('ODR001', 'P002', 6),
+('ODR002', 'P001', 6),
+('ODR002', 'P002', 2),
+('ODR003', 'P001', 1),
+('ODR003', 'P002', 1),
+('ODR004', 'P001', 1),
+('ODR005', 'P002', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_header`
+--
+
+CREATE TABLE `order_header` (
+  `idOrder` varchar(50) NOT NULL,
+  `idCustomer` varchar(50) NOT NULL,
+  `idPromo` varchar(50) DEFAULT NULL,
+  `status` varchar(30) NOT NULL,
+  `ordered_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `total_amount` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_header`
+--
+
+INSERT INTO `order_header` (`idOrder`, `idCustomer`, `idPromo`, `status`, `ordered_at`, `total_amount`) VALUES
+('ODR001', 'CU001', NULL, 'Waiting for Delivery', '2025-12-03 17:50:04', 60000),
+('ODR002', 'CU001', 'PRM003', 'Waiting for Delivery', '2025-12-03 17:52:54', 50000),
+('ODR003', 'CU001', NULL, 'Waiting for Delivery', '2025-12-03 18:16:41', 15000),
+('ODR004', 'CU001', NULL, 'Waiting for Delivery', '2025-12-03 18:18:13', 5000),
+('ODR005', 'CU001', NULL, 'Waiting for Delivery', '2025-12-03 18:18:49', 10000);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `product`
 --
 
@@ -40,8 +103,31 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`idProduct`, `name`, `price`, `stock`, `category`) VALUES
-('P001', 'Chocolate Milk', 5000, 5, 'Drink'),
-('P002', 'Bread', 10000, 11, 'Food');
+('P001', 'Chocolate Milk', 5000, 92, 'Drink'),
+('P002', 'Bread', 10000, 196, 'Food');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `promo`
+--
+
+CREATE TABLE `promo` (
+  `idPromo` varchar(100) NOT NULL,
+  `code` varchar(50) NOT NULL,
+  `headline` varchar(255) NOT NULL,
+  `discountPercentage` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `promo`
+--
+
+INSERT INTO `promo` (`idPromo`, `code`, `headline`, `discountPercentage`) VALUES
+('PRM001', 'DISC10', 'Diskon Spesial 10%', 0.1),
+('PRM002', 'HEMAT50', 'Potongan Setengah Harga!', 0.5),
+('PRM003', 'NEWUSER', 'Promo Pengguna Baru 20%', 0.2),
+('PRM004', 'FLASH5', 'Flash Sale 5%', 0.05);
 
 -- --------------------------------------------------------
 
@@ -72,12 +158,34 @@ INSERT INTO `users` (`idUser`, `fullName`, `email`, `password`, `phone`, `addres
 ('AD002', 'Alicia', 'alicia@gmail.com', 'admin321', '081234567891', 'Jakarta', 'admin', NULL, '021-9998', NULL, NULL),
 ('CR001', 'Nicholas', 'nicholas@gmail.com', 'nic123', '08123123', 'kebun jeruk', 'courier', NULL, NULL, 'cars', 'B 1010 ASD'),
 ('CR002', 'Kevin ', 'kevin@gmail.com', 'kevin123', '0812345', 'kemanggisan', 'courier', NULL, NULL, 'Motor NMAX', 'B 4325 BS'),
-('CU001', 'Rosamond', 'rosa@gmail.com', 'rosa123', '082345678901', 'Bumi', 'customer', 310000, NULL, NULL, NULL),
+('CU001', 'Rosamond', 'rosa@gmail.com', 'rosa123', '082345678901', 'Bumi', 'customer', 325000, NULL, NULL, NULL),
 ('CU002', 'Selina', 'selina@gmail.com', 'selsel123', '083456789012', 'Indonesia', 'customer', 10000, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `cart_item`
+--
+ALTER TABLE `cart_item`
+  ADD PRIMARY KEY (`idCustomer`,`idProduct`),
+  ADD KEY `idProduct` (`idProduct`);
+
+--
+-- Indexes for table `order_detail`
+--
+ALTER TABLE `order_detail`
+  ADD PRIMARY KEY (`idOrder`,`idProduct`),
+  ADD KEY `idProduct` (`idProduct`);
+
+--
+-- Indexes for table `order_header`
+--
+ALTER TABLE `order_header`
+  ADD PRIMARY KEY (`idOrder`),
+  ADD KEY `idCustomer` (`idCustomer`),
+  ADD KEY `idPromo` (`idPromo`);
 
 --
 -- Indexes for table `product`
@@ -86,11 +194,43 @@ ALTER TABLE `product`
   ADD PRIMARY KEY (`idProduct`);
 
 --
+-- Indexes for table `promo`
+--
+ALTER TABLE `promo`
+  ADD PRIMARY KEY (`idPromo`),
+  ADD UNIQUE KEY `code` (`code`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`idUser`),
   ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `cart_item`
+--
+ALTER TABLE `cart_item`
+  ADD CONSTRAINT `cart_item_ibfk_1` FOREIGN KEY (`idCustomer`) REFERENCES `users` (`idUser`),
+  ADD CONSTRAINT `cart_item_ibfk_2` FOREIGN KEY (`idProduct`) REFERENCES `product` (`idProduct`);
+
+--
+-- Constraints for table `order_detail`
+--
+ALTER TABLE `order_detail`
+  ADD CONSTRAINT `order_detail_ibfk_1` FOREIGN KEY (`idOrder`) REFERENCES `order_header` (`idOrder`) ON DELETE CASCADE,
+  ADD CONSTRAINT `order_detail_ibfk_2` FOREIGN KEY (`idProduct`) REFERENCES `product` (`idProduct`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `order_header`
+--
+ALTER TABLE `order_header`
+  ADD CONSTRAINT `order_header_ibfk_1` FOREIGN KEY (`idCustomer`) REFERENCES `users` (`idUser`),
+  ADD CONSTRAINT `order_header_ibfk_2` FOREIGN KEY (`idPromo`) REFERENCES `promo` (`idPromo`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

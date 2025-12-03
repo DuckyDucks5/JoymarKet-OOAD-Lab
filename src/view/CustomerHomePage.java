@@ -34,10 +34,11 @@ public class CustomerHomePage extends BorderPane {
 
 		productListBtn.setOnAction(e -> {
 //	          this.setCenter(new ProductListPage());
+			this.setCenter(new 	CustProductListPage(this, customer));
 		});
 
 		cartBtn.setOnAction(e -> {
-//	            this.setCenter(new CartPage());
+			this.setCenter(new CartPage(this, customer));
 		});
 
 		orderListBtn.setOnAction(e -> {

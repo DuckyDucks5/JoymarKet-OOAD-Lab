@@ -8,6 +8,7 @@ public class UserHandler {
 
 	private UserDA userRepo = new UserDA();
 
+	//Register and Validation
 	public String registerAccount(String fullname, String email, String password, String confirm, String phone, String address){
 		StringBuilder sb = new StringBuilder();
 
@@ -34,7 +35,7 @@ public class UserHandler {
 				sb.append("- Phone number must be numeric.\n");
 			}
 			if (phone.length() < 10 || phone.length() > 13) {
-				sb.append("- Phone number must be 10–13 digits.\n");
+				sb.append("- Phone number must be 10ï¿½13 digits.\n");
 			}
 		}
 
@@ -46,6 +47,7 @@ public class UserHandler {
 			return sb.toString();
 		}
 
+		//Insert Customer
 		try {
 			String newId = userRepo.generateCustomerID();
 			Customer customer = new Customer(newId, fullname, email, password, phone, address, 0);
@@ -63,6 +65,7 @@ public class UserHandler {
 		}
 	}
 
+	//Login
 	public User login(String email, String password) {
 		if (email.isBlank() || password.isBlank())
 			return null;
@@ -70,6 +73,7 @@ public class UserHandler {
 		return userRepo.findByEmailAndPassword(email, password);
 	}
 
+	//Update Balance
 	public boolean updateBalance(String idUser, double balance) {
 		return userRepo.updateBalance(idUser, balance);
 	}

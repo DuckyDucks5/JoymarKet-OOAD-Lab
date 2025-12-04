@@ -7,11 +7,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import model.Customer;
 
-public class TopUpPage extends GridPane {
+public class CustTopUpPage extends GridPane {
 	private Customer customer;
 	private Label balanceLbl;
 
-	public TopUpPage(Customer customer) {
+	public CustTopUpPage(Customer customer) {
 		this.customer = customer;
 
 		setVgap(10);

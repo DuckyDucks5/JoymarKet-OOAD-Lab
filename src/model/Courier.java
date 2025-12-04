@@ -28,6 +28,10 @@ public class Courier extends User{
 		this.vehiclePlate = vehiclePlate;
 	}
 	
+	@Override
+	public String toString() {
+	    return getFullname(); 
+	}
 	
 
 	

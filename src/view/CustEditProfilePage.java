@@ -7,12 +7,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import model.Customer;
 
-public class EditProfilePage extends GridPane {
+public class CustEditProfilePage extends GridPane {
 
     private Customer customer;
     private Button confirmBtn;
 
-    public EditProfilePage(Customer customer) {
+    public CustEditProfilePage(Customer customer) {
         this.customer = customer;
 
         setVgap(10);

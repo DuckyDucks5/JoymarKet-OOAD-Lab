@@ -9,21 +9,24 @@ import model.OrderHeader;
 import utils.Connect;
 
 public class OrderHeaderDA {
-	
-	private Connection conn = Connect.getInstance().getConn();
-	
-	//membuat order header
-	public boolean createOrderHeader(OrderHeader order) {
+
+    private Connection conn = Connect.getInstance().getConn();
+
+    // CREATE ORDER HEADER
+    public boolean createOrderHeader(OrderHeader order) {
         try {
-            String query = "INSERT INTO order_header (idOrder, idCustomer, idPromo, status, ordered_at, total_amount) VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO order_header "
+                    + "(idOrder, idCustomer, idPromo, courierId, status, ordered_at, total_amount) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, order.getIdOrder());
             ps.setString(2, order.getIdCustomer());
-            ps.setString(3, order.getIdPromo());
-            ps.setString(4, order.getStatus());
-            ps.setTimestamp(5, order.getOrderedAt());
-            ps.setDouble(6, order.getTotalAmount());
+            ps.setString(3, order.getIdPromo());   
+            ps.setString(5, order.getStatus());
+            ps.setString(4, order.getCourierId()); 
+            ps.setTimestamp(6, order.getOrderedAt());
+            ps.setDouble(7, order.getTotalAmount());
 
             return ps.executeUpdate() > 0;
 
@@ -32,9 +35,9 @@ public class OrderHeaderDA {
             return false;
         }
     }
-	
-	//Generate orderId 
-	public String generateOrderID() {
+
+    // GENERATE ORDER ID
+    public String generateOrderID() {
         try {
             int num = 1;
             while (true) {
@@ -44,9 +47,7 @@ public class OrderHeaderDA {
                 ps.setString(1, id);
 
                 ResultSet rs = ps.executeQuery();
-                if (!rs.next()) {
-                    return id;
-                }
+                if (!rs.next()) return id;
                 num++;
             }
         } catch (Exception e) {
@@ -54,8 +55,9 @@ public class OrderHeaderDA {
         }
         return null;
     }
-	
-	public OrderHeader getOrderHeader(String orderId) {
+
+    // GET ONE ORDER HEADER
+    public OrderHeader getOrderHeader(String orderId) {
         try {
             String query = "SELECT * FROM order_header WHERE idOrder = ?";
             PreparedStatement ps = conn.prepareStatement(query);
@@ -68,8 +70,9 @@ public class OrderHeaderDA {
                         rs.getString("idCustomer"),
                         rs.getString("idPromo"),
                         rs.getString("status"),
-                        rs.getTimestamp("orderedAt"),
-                        rs.getDouble("totalAmount"));
+                        rs.getString("courierId"),  
+                        rs.getTimestamp("ordered_at"),     
+                        rs.getDouble("total_amount"));     
             }
 
         } catch (Exception e) {
@@ -77,8 +80,9 @@ public class OrderHeaderDA {
         }
         return null;
     }
-	
-	public ArrayList<OrderHeader> getCustomerOrders(String idCustomer) {
+
+    // GET ALL ORDERS OF CUSTOMER
+    public ArrayList<OrderHeader> getCustomerOrders(String idCustomer) {
         ArrayList<OrderHeader> list = new ArrayList<>();
 
         try {
@@ -94,17 +98,45 @@ public class OrderHeaderDA {
                         rs.getString("idCustomer"),
                         rs.getString("idPromo"),
                         rs.getString("status"),
-                        rs.getTimestamp("orderedAt"),
-                        rs.getDouble("totalAmount")));
+                        rs.getString("courierId"), 
+                        rs.getTimestamp("ordered_at"),
+                        rs.getDouble("total_amount")));
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return list;
     }
 
+    // GET ALL ORDERS
+    public ArrayList<OrderHeader> getAllCustomerOrders() {
+        ArrayList<OrderHeader> list = new ArrayList<>();
+
+        try {
+            String query = "SELECT * FROM order_header";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                list.add(new OrderHeader(
+                        rs.getString("idOrder"),
+                        rs.getString("idCustomer"),
+                        rs.getString("idPromo"),        
+                        rs.getString("status"),
+                        rs.getString("courierId"), 
+                        rs.getTimestamp("ordered_at"),
+                        rs.getDouble("total_amount")));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // UPDATE STATUS ORDER
     public boolean updateStatus(String idOrder, String status) {
         try {
             String query = "UPDATE order_header SET status = ? WHERE idOrder = ?";
@@ -121,5 +153,3 @@ public class OrderHeaderDA {
         }
     }
 }
-	
-

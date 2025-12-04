@@ -42,4 +42,20 @@ public class CourierDA {
 		
 		return couriers;
 	}
+	
+	public boolean assignCourier(String orderId, String courierId) {
+		String query = "UPDATE order_header SET courierId = ?, status = ? WHERE idOrder = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, courierId);
+            ps.setString(2, "Pending"); 
+            ps.setString(3, orderId);
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+	}
 }

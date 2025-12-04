@@ -1,5 +1,6 @@
 package controller;
 
+import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ public class OrderHeaderHandler {
 
         String orderId = orderHeaderDA.generateOrderID();
         Timestamp orderedTime = new Timestamp(System.currentTimeMillis());
+        String courierId = null;
 
         ArrayList<CartItem> cartItems = cartItemHandler.getCartItems(idCustomer);
 
@@ -36,6 +38,7 @@ public class OrderHeaderHandler {
                 idCustomer,
                 idPromo,
                 "Waiting for Delivery",
+                courierId,
                 orderedTime,
                 total
         );
@@ -65,6 +68,10 @@ public class OrderHeaderHandler {
 	public ArrayList<OrderHeader> getCustomerOrders(String idCustomer){
         return orderHeaderDA.getCustomerOrders(idCustomer);
     }
+	
+	public ArrayList<OrderHeader> getAllCustomerOrders(){
+        return orderHeaderDA.getAllCustomerOrders();
+    }
 
     public boolean updateStatus(String idOrder, String newStatus){
         return orderHeaderDA.updateStatus(idOrder, newStatus);
@@ -73,7 +80,6 @@ public class OrderHeaderHandler {
     public ArrayList<OrderDetail> getOrderDetails(String idOrder){
         return orderDetailDA.getOrderDetails(idOrder);
     }
-	
-	
+
 	
 }

@@ -33,28 +33,27 @@ public class CustomerHomePage extends BorderPane {
 		this.setCenter(title);
 
 		productListBtn.setOnAction(e -> {
-//	          this.setCenter(new ProductListPage());
 			this.setCenter(new 	CustProductListPage(this, customer));
 		});
 
 		cartBtn.setOnAction(e -> {
-			this.setCenter(new CartPage(this, customer));
+			this.setCenter(new CustCartPage(this, customer));
 		});
 
 		orderListBtn.setOnAction(e -> {
-//	        	this.setCenter(new OrderListPage());
+	        	this.setCenter(new CustOrderListPage(this, customer));
 		});
 
 		orderHistoryBtn.setOnAction(e -> {
-//	        	this.setCenter(new OrderHistoryPage());
+	        	this.setCenter(new CustOrderHistory(this, customer));
 		});
 
 		topUpBtn.setOnAction(e -> {
-			this.setCenter(new TopUpPage(customer));
+			this.setCenter(new CustTopUpPage(customer));
 		});
 
 		editProfileBtn.setOnAction(e -> {
-	        this.setCenter(new EditProfilePage(customer));
+	        this.setCenter(new CustEditProfilePage(customer));
 		});
 	}
 }

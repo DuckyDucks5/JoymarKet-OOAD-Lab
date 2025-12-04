@@ -5,4 +5,5 @@ module OOADLab {
 	requires java.sql;
     
     opens main to javafx.graphics, javafx.fxml;
+    
 }

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 03, 2025 at 07:20 PM
+-- Generation Time: Dec 04, 2025 at 07:39 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,6 +33,13 @@ CREATE TABLE `cart_item` (
   `count` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `cart_item`
+--
+
+INSERT INTO `cart_item` (`idCustomer`, `idProduct`, `count`) VALUES
+('CR001', 'P002', 10);
+
 -- --------------------------------------------------------
 
 --
@@ -56,7 +63,12 @@ INSERT INTO `order_detail` (`idOrder`, `idProduct`, `qty`) VALUES
 ('ODR003', 'P001', 1),
 ('ODR003', 'P002', 1),
 ('ODR004', 'P001', 1),
-('ODR005', 'P002', 1);
+('ODR005', 'P002', 1),
+('ODR006', 'P001', 2),
+('ODR007', 'P001', 10),
+('ODR007', 'P002', 1),
+('ODR008', 'P001', 1),
+('ODR009', 'P002', 1);
 
 -- --------------------------------------------------------
 
@@ -70,19 +82,24 @@ CREATE TABLE `order_header` (
   `idPromo` varchar(50) DEFAULT NULL,
   `status` varchar(30) NOT NULL,
   `ordered_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `total_amount` double NOT NULL
+  `total_amount` double NOT NULL,
+  `courierId` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `order_header`
 --
 
-INSERT INTO `order_header` (`idOrder`, `idCustomer`, `idPromo`, `status`, `ordered_at`, `total_amount`) VALUES
-('ODR001', 'CU001', NULL, 'Waiting for Delivery', '2025-12-03 17:50:04', 60000),
-('ODR002', 'CU001', 'PRM003', 'Waiting for Delivery', '2025-12-03 17:52:54', 50000),
-('ODR003', 'CU001', NULL, 'Waiting for Delivery', '2025-12-03 18:16:41', 15000),
-('ODR004', 'CU001', NULL, 'Waiting for Delivery', '2025-12-03 18:18:13', 5000),
-('ODR005', 'CU001', NULL, 'Waiting for Delivery', '2025-12-03 18:18:49', 10000);
+INSERT INTO `order_header` (`idOrder`, `idCustomer`, `idPromo`, `status`, `ordered_at`, `total_amount`, `courierId`) VALUES
+('ODR001', 'CU001', NULL, 'Pending', '2025-12-03 17:50:04', 60000, 'CR002'),
+('ODR002', 'CU001', 'PRM003', 'Pending', '2025-12-03 17:52:54', 50000, 'CR002'),
+('ODR003', 'CU001', NULL, 'Pending', '2025-12-03 18:16:41', 15000, 'CR002'),
+('ODR004', 'CU001', NULL, 'Waiting for Delivery', '2025-12-03 18:18:13', 5000, NULL),
+('ODR005', 'CU001', NULL, 'Waiting for Delivery', '2025-12-03 18:18:49', 10000, NULL),
+('ODR006', 'CR001', NULL, 'Waiting for Delivery', '2025-12-04 08:57:51', 10000, NULL),
+('ODR007', 'CR001', NULL, 'Delivered', '2025-12-04 16:16:52', 60000, NULL),
+('ODR008', 'CR001', NULL, 'Waiting for Delivery', '2025-12-04 17:00:19', 5000, NULL),
+('ODR009', 'CR001', NULL, 'Waiting for Delivery', '2025-12-04 17:02:28', 10000, NULL);
 
 -- --------------------------------------------------------
 
@@ -103,8 +120,8 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`idProduct`, `name`, `price`, `stock`, `category`) VALUES
-('P001', 'Chocolate Milk', 5000, 92, 'Drink'),
-('P002', 'Bread', 10000, 196, 'Food');
+('P001', 'Chocolate Milk', 5000, 79, 'Drink'),
+('P002', 'Bread', 10000, 194, 'Food');
 
 -- --------------------------------------------------------
 
@@ -156,7 +173,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`idUser`, `fullName`, `email`, `password`, `phone`, `address`, `role`, `balance`, `emergencyContact`, `vehicleType`, `vehiclePlate`) VALUES
 ('AD001', 'Auryn', 'auryn@gmail.com', 'admin123', '081234567890', 'Jakarta', 'admin', NULL, '021-9999', NULL, NULL),
 ('AD002', 'Alicia', 'alicia@gmail.com', 'admin321', '081234567891', 'Jakarta', 'admin', NULL, '021-9998', NULL, NULL),
-('CR001', 'Nicholas', 'nicholas@gmail.com', 'nic123', '08123123', 'kebun jeruk', 'courier', NULL, NULL, 'cars', 'B 1010 ASD'),
+('CR001', 'Nicholas', 'nicholas@gmail.com', 'nic123', '081231232383', 'Kebon Jeruk', 'courier', 1000015000, NULL, 'cars', 'B 1010 ASD'),
 ('CR002', 'Kevin ', 'kevin@gmail.com', 'kevin123', '0812345', 'kemanggisan', 'courier', NULL, NULL, 'Motor NMAX', 'B 4325 BS'),
 ('CU001', 'Rosamond', 'rosa@gmail.com', 'rosa123', '082345678901', 'Bumi', 'customer', 325000, NULL, NULL, NULL),
 ('CU002', 'Selina', 'selina@gmail.com', 'selsel123', '083456789012', 'Indonesia', 'customer', 10000, NULL, NULL, NULL);

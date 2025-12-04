@@ -19,7 +19,7 @@ import model.Customer;
 import model.Product;
 import model.Promo;
 
-public class CartPage extends GridPane {
+public class CustCartPage extends GridPane {
 
 	private CustomerHomePage parent;
 	private Customer customer;
@@ -32,7 +32,7 @@ public class CartPage extends GridPane {
 	private double grandTotalToPay; 
     private Promo appliedPromo = null;
 	
-	public CartPage(CustomerHomePage parent, Customer customer) {
+	public CustCartPage(CustomerHomePage parent, Customer customer) {
 		this.parent = parent;
 		this.customer = customer;
 		cartItemHandler = new CartItemHandler();
@@ -136,7 +136,7 @@ public class CartPage extends GridPane {
         				else {
         					showAlert("Error", "Failed to update the cart. Please try again.", AlertType.ERROR);
         				}
-        				parent.setCenter(new CartPage(parent, customer));
+        				parent.setCenter(new CustCartPage(parent, customer));
             		}catch(NumberFormatException e2) {
             			showAlert("Error", "Quantity must be numeric!", AlertType.ERROR);
 						return;
@@ -144,7 +144,7 @@ public class CartPage extends GridPane {
             	});
             	
             	cancelBtn.setOnAction(ev -> {
-            		parent.setCenter(new CartPage(parent, customer));
+            		parent.setCenter(new CustCartPage(parent, customer));
             	});
         	});
         	
@@ -157,7 +157,7 @@ public class CartPage extends GridPane {
 				else {
 					showAlert("Error", "Failed to delete the cart. Please try again.", AlertType.ERROR);
 				}
-				parent.setCenter(new CartPage(parent, customer));
+				parent.setCenter(new CustCartPage(parent, customer));
         	});
         	
         	row++;
@@ -234,7 +234,7 @@ public class CartPage extends GridPane {
 				showAlert("Error", "Failed to Order. Please try again.", AlertType.ERROR);
 			}
 
-            parent.setCenter(new CartPage(parent, customer));
+            parent.setCenter(new CustCartPage(parent, customer));
         });
         
 	}

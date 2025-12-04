@@ -7,11 +7,14 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
+import model.Admin;
+import model.Customer;
 
 public class AdminHomePage extends BorderPane {
+	private Admin admin;
 	public AdminHomePage() {
 		Button productListCRUDBtn = new Button("Product List");
-	    Button courirPageBtn = new Button("Courir Page");
+	    Button courirPageBtn = new Button("Courier Page");
 	    Button orderPageBtn = new Button("Order Page");
 
 	       HBox navBar = new HBox(10, productListCRUDBtn, courirPageBtn, orderPageBtn);
@@ -27,18 +30,16 @@ public class AdminHomePage extends BorderPane {
 	       this.setCenter(title);
 	       
 	       
-
 	       productListCRUDBtn.setOnAction(e -> {
 	           this.setCenter(new ProductListPage());
 	       });
 
 	        courirPageBtn.setOnAction(e -> {
-//	            this.getScene().setRoot(new CourirPage());
 	        	this.setCenter(new CourierListPage());
 	        });
 	        
 	        orderPageBtn.setOnAction(e -> {
-//	        	this.getScene().setRoot(new OrderPage());
+	        	this.setCenter(new AdminOrderList(this, admin));
 	        });
 	}
 }

@@ -64,7 +64,7 @@ public class UserDA {
     }
 
     
-    
+    //Find Email Password for Login Validate
     public User findByEmailAndPassword(String email, String password) {
         try {
             String query = "SELECT * FROM users WHERE email = ? AND password = ?";

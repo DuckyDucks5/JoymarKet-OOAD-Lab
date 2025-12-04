@@ -1,5 +1,6 @@
 package controller;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 import model.Courier;
@@ -11,5 +12,8 @@ public class CourierHandler {
 	public ArrayList<Courier> getAllCouriers(){
 		return courierDA.getAllCouriers();
 	}
+    public boolean assignCourier(String orderId, String courierId) {
+        return courierDA.assignCourier(orderId, courierId);
+    }
 
 }

@@ -12,12 +12,13 @@ import model.Courier;
 public class CourierHomePage extends BorderPane {
 	private Courier courier;
 	
-	public CourierHomePage() {
-		Button productListCRUDBtn = new Button("Product List");
+	public CourierHomePage(Courier courier) {
+		this.courier = courier;
+		Button orderListCRUDBtn = new Button("Order List");
 		Button assignedDeliveriesBtn = new Button("Assigned Delivery");
 //		Button editDeliveryStatusBtn = new Button("Order List");
 		
-		HBox navBar = new HBox(10, productListCRUDBtn, assignedDeliveriesBtn);
+		HBox navBar = new HBox(10, orderListCRUDBtn, assignedDeliveriesBtn);
 	    navBar.setAlignment(Pos.CENTER_RIGHT);
 	    navBar.setPadding(new Insets(15));
 
@@ -29,12 +30,12 @@ public class CourierHomePage extends BorderPane {
 	    this.setTop(navBar);
 	    this.setCenter(title);
        
-	    productListCRUDBtn.setOnAction(e -> {
-	    	this.setCenter(new ProductListPage());
+	    orderListCRUDBtn.setOnAction(e -> {
+	    	this.setCenter(new CourierViewAllOrderPage(this, courier));
 	    });
 
 	    assignedDeliveriesBtn.setOnAction(e -> {
-//        	this.setCenter(new CourierListPage());
+	    	this.setCenter(new CourierAssignedDeliveryPage(this, courier));
         });
 	      
 	}

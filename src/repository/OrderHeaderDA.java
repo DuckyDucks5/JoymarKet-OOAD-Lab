@@ -16,15 +16,15 @@ public class OrderHeaderDA {
     public boolean createOrderHeader(OrderHeader order) {
         try {
             String query = "INSERT INTO order_header "
-                    + "(idOrder, idCustomer, idPromo, courierId, status, ordered_at, total_amount) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    + "(idOrder, idCustomer, idPromo, status, ordered_at, total_amount) "
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
 
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, order.getIdOrder());
             ps.setString(2, order.getIdCustomer());
             ps.setString(3, order.getIdPromo());   
             ps.setString(5, order.getStatus());
-            ps.setString(4, order.getCourierId()); 
+//            ps.setString(4, order.getCourierId()); 
             ps.setTimestamp(6, order.getOrderedAt());
             ps.setDouble(7, order.getTotalAmount());
 
@@ -70,7 +70,7 @@ public class OrderHeaderDA {
                         rs.getString("idCustomer"),
                         rs.getString("idPromo"),
                         rs.getString("status"),
-                        rs.getString("courierId"),  
+                    
                         rs.getTimestamp("ordered_at"),     
                         rs.getDouble("total_amount"));     
             }
@@ -98,7 +98,7 @@ public class OrderHeaderDA {
                         rs.getString("idCustomer"),
                         rs.getString("idPromo"),
                         rs.getString("status"),
-                        rs.getString("courierId"), 
+                      
                         rs.getTimestamp("ordered_at"),
                         rs.getDouble("total_amount")));
             }
@@ -125,7 +125,7 @@ public class OrderHeaderDA {
                         rs.getString("idCustomer"),
                         rs.getString("idPromo"),        
                         rs.getString("status"),
-                        rs.getString("courierId"), 
+
                         rs.getTimestamp("ordered_at"),
                         rs.getDouble("total_amount")));
             }

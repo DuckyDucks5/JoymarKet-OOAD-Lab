@@ -25,7 +25,7 @@ public class AdminOrderDetailPage extends GridPane{
 	      add(new Label("Order ID: " + oh.getIdOrder()), 0, 0);
 	      add(new Label("Status: " + oh.getStatus()), 0, 1);
 	      add(new Label("Date: " + oh.getOrderedAt()), 0, 2);
-	      add(new Label("Courier ID: " + oh.getCourierId()), 0, 3);
+//	      add(new Label("Courier ID: " + oh.getCourierId()), 0, 3);
 
 	      add(new Label("Product"), 0, 5);
 	      add(new Label("Qty"), 1, 5);

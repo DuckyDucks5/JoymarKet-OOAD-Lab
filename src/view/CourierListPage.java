@@ -32,6 +32,8 @@ public class CourierListPage extends GridPane{
         add(vehicleTypeLbl, 4, 0);
         add(vehiclePlateLbl, 5, 0);
 		
+        
+        
 		ArrayList<Courier> couriers = handler.getAllCouriers();
 		
 		int row = 1;

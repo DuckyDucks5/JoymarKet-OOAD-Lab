@@ -96,7 +96,7 @@ public class LoginPage extends BorderPane {
                 getScene().setRoot(new CustomerHomePage((Customer) loggedIn));
             } else if (loggedIn instanceof Courier) {
             	showAlert("Success", "Logged in as Courier!", AlertType.INFORMATION);
-                getScene().setRoot(new CourierHomePage());
+                getScene().setRoot(new CourierHomePage((Courier) loggedIn));
             }
         });
     }

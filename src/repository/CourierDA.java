@@ -43,13 +43,14 @@ public class CourierDA {
 		return couriers;
 	}
 	
-	public boolean assignCourier(String orderId, String courierId) {
-		String query = "UPDATE order_header SET courierId = ?, status = ? WHERE idOrder = ?";
+	public boolean assignCourier(String orderId) {
+		
+		String query = "UPDATE order_header SET status = ? WHERE idOrder = ?";
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, courierId);
-            ps.setString(2, "Pending"); 
-            ps.setString(3, orderId);
+//            ps.setString(1, courierId);
+            ps.setString(1, "Waiting for Delivery"); 
+            ps.setString(2, orderId);
 
             int rows = ps.executeUpdate();
             return rows > 0;
@@ -57,5 +58,28 @@ public class CourierDA {
             e.printStackTrace();
             return false;
         }
+	}
+	
+	public String getCourier(String idOrder) {
+		String query = "SELECT d.idCourier "
+				+ "FROM delivery d JOIN order_header oh ON d.idOrder = oh.idOrder "
+				+ "WHERE d.idOrder = ?";
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, idOrder);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				return rs.getString("idCourier");
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

@@ -39,7 +39,7 @@ public class AdminHomePage extends BorderPane {
 	        });
 	        
 	        orderPageBtn.setOnAction(e -> {
-	        	this.setCenter(new AdminOrderList(this, admin));
+	        	this.setCenter(new AdminOrderListPage(this, admin));
 	        });
 	}
 }

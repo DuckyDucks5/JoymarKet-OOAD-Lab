@@ -8,17 +8,16 @@ public class OrderHeader {
     private String idCustomer;
     private String idPromo;
     private String status;
-    private String courierId;
+//    private String courierId;
     private Timestamp orderedAt;
     private double totalAmount;
-	public OrderHeader(String idOrder, String idCustomer, String idPromo, String status, String courierId,
+	public OrderHeader(String idOrder, String idCustomer, String idPromo, String status,
 			Timestamp orderedAt, double totalAmount) {
 		super();
 		this.idOrder = idOrder;
 		this.idCustomer = idCustomer;
 		this.idPromo = idPromo;
 		this.status = status;
-		this.courierId = courierId;
 		this.orderedAt = orderedAt;
 		this.totalAmount = totalAmount;
 	}
@@ -46,12 +45,7 @@ public class OrderHeader {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getCourierId() {
-		return courierId;
-	}
-	public void setCourierId(String courierId) {
-		this.courierId = courierId;
-	}
+	
 	public Timestamp getOrderedAt() {
 		return orderedAt;
 	}

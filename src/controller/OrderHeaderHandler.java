@@ -38,7 +38,7 @@ public class OrderHeaderHandler {
                 idCustomer,
                 idPromo,
                 "Waiting for Delivery",
-                courierId,
+//                courierId,
                 orderedTime,
                 total
         );

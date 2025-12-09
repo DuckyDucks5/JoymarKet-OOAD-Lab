@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 04, 2025 at 07:39 PM
+-- Generation Time: Dec 08, 2025 at 09:02 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -38,7 +38,33 @@ CREATE TABLE `cart_item` (
 --
 
 INSERT INTO `cart_item` (`idCustomer`, `idProduct`, `count`) VALUES
-('CR001', 'P002', 10);
+('CR001', 'P002', 10),
+('CU001', 'P001', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `delivery`
+--
+
+CREATE TABLE `delivery` (
+  `idOrder` varchar(20) NOT NULL,
+  `idCourier` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `delivery`
+--
+
+INSERT INTO `delivery` (`idOrder`, `idCourier`) VALUES
+('ODR002', 'CR002'),
+('ODR003', 'CR002'),
+('ODR004', 'CR001'),
+('ODR005', 'CR001'),
+('ODR006', 'CR001'),
+('ODR007', 'CR002'),
+('ODR008', 'CR001'),
+('ODR009', 'CR002');
 
 -- --------------------------------------------------------
 
@@ -82,24 +108,23 @@ CREATE TABLE `order_header` (
   `idPromo` varchar(50) DEFAULT NULL,
   `status` varchar(30) NOT NULL,
   `ordered_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `total_amount` double NOT NULL,
-  `courierId` varchar(20) DEFAULT NULL
+  `total_amount` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `order_header`
 --
 
-INSERT INTO `order_header` (`idOrder`, `idCustomer`, `idPromo`, `status`, `ordered_at`, `total_amount`, `courierId`) VALUES
-('ODR001', 'CU001', NULL, 'Pending', '2025-12-03 17:50:04', 60000, 'CR002'),
-('ODR002', 'CU001', 'PRM003', 'Pending', '2025-12-03 17:52:54', 50000, 'CR002'),
-('ODR003', 'CU001', NULL, 'Pending', '2025-12-03 18:16:41', 15000, 'CR002'),
-('ODR004', 'CU001', NULL, 'Waiting for Delivery', '2025-12-03 18:18:13', 5000, NULL),
-('ODR005', 'CU001', NULL, 'Waiting for Delivery', '2025-12-03 18:18:49', 10000, NULL),
-('ODR006', 'CR001', NULL, 'Waiting for Delivery', '2025-12-04 08:57:51', 10000, NULL),
-('ODR007', 'CR001', NULL, 'Delivered', '2025-12-04 16:16:52', 60000, NULL),
-('ODR008', 'CR001', NULL, 'Waiting for Delivery', '2025-12-04 17:00:19', 5000, NULL),
-('ODR009', 'CR001', NULL, 'Waiting for Delivery', '2025-12-04 17:02:28', 10000, NULL);
+INSERT INTO `order_header` (`idOrder`, `idCustomer`, `idPromo`, `status`, `ordered_at`, `total_amount`) VALUES
+('ODR001', 'CU001', NULL, 'Pending', '2025-12-03 17:50:04', 60000),
+('ODR002', 'CU001', 'PRM003', 'Delivered', '2025-12-03 17:52:54', 50000),
+('ODR003', 'CU001', NULL, 'Delivered', '2025-12-03 18:16:41', 15000),
+('ODR004', 'CU001', NULL, 'Delivered', '2025-12-03 18:18:13', 5000),
+('ODR005', 'CU001', NULL, 'Waiting for Delivery', '2025-12-03 18:18:49', 10000),
+('ODR006', 'CR001', NULL, 'Waiting for Delivery', '2025-12-04 08:57:51', 10000),
+('ODR007', 'CR001', NULL, 'Delivered', '2025-12-04 16:16:52', 60000),
+('ODR008', 'CR001', NULL, 'Waiting for Delivery', '2025-12-04 17:00:19', 5000),
+('ODR009', 'CR001', NULL, 'Waiting for Delivery', '2025-12-04 17:02:28', 10000);
 
 -- --------------------------------------------------------
 
@@ -190,6 +215,13 @@ ALTER TABLE `cart_item`
   ADD KEY `idProduct` (`idProduct`);
 
 --
+-- Indexes for table `delivery`
+--
+ALTER TABLE `delivery`
+  ADD PRIMARY KEY (`idOrder`,`idCourier`),
+  ADD KEY `fk_delivery_courier` (`idCourier`);
+
+--
 -- Indexes for table `order_detail`
 --
 ALTER TABLE `order_detail`
@@ -234,6 +266,13 @@ ALTER TABLE `users`
 ALTER TABLE `cart_item`
   ADD CONSTRAINT `cart_item_ibfk_1` FOREIGN KEY (`idCustomer`) REFERENCES `users` (`idUser`),
   ADD CONSTRAINT `cart_item_ibfk_2` FOREIGN KEY (`idProduct`) REFERENCES `product` (`idProduct`);
+
+--
+-- Constraints for table `delivery`
+--
+ALTER TABLE `delivery`
+  ADD CONSTRAINT `fk_delivery_courier` FOREIGN KEY (`idCourier`) REFERENCES `users` (`idUser`),
+  ADD CONSTRAINT `fk_delivery_order` FOREIGN KEY (`idOrder`) REFERENCES `order_header` (`idOrder`);
 
 --
 -- Constraints for table `order_detail`

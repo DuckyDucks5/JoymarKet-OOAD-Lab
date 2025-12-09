@@ -8,6 +8,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import model.Admin;
+import model.Courier;
 import model.Customer;
 import model.User;
 
@@ -80,6 +81,7 @@ public class LoginPage extends BorderPane {
 
             UserHandler controller = new UserHandler();
             User loggedIn = controller.login(email, pass);
+            System.out.println(loggedIn.getRole());
 
             if (loggedIn == null) {
                 showAlert("Login Failed", "Incorrect email or password.", AlertType.ERROR);
@@ -92,6 +94,9 @@ public class LoginPage extends BorderPane {
             } else if (loggedIn instanceof Customer) {
                 showAlert("Success", "Logged in as Customer!", AlertType.INFORMATION);
                 getScene().setRoot(new CustomerHomePage((Customer) loggedIn));
+            } else if (loggedIn instanceof Courier) {
+            	showAlert("Success", "Logged in as Courier!", AlertType.INFORMATION);
+                getScene().setRoot(new CourierHomePage((Courier) loggedIn));
             }
         });
     }

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import model.Customer;
 import model.User;
 import model.Admin;
+import model.Courier;
 import utils.Connect;
 
 public class UserDA {
@@ -83,9 +84,14 @@ public class UserDA {
             String role = rs.getString("role");
             double balance = rs.getDouble("balance");
             String emergency = rs.getString("emergencyContact");
+            String vehicleType = rs.getString("vehicleType");
+            String vehiclePlate = rs.getString("vehiclePlate");
 
             if (role.equalsIgnoreCase("admin")) {
                 return new Admin(id, fullname, email, password, phone, address, emergency);
+            }
+            else if (role.equalsIgnoreCase("courier")) {
+            	return new Courier(id, fullname, email, phone, address, vehicleType, vehiclePlate);
             }
 
             return new Customer(id, fullname, email, password, phone, address, balance);

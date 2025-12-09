@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import controller.CourierHandler;
+import controller.DeliveryHandler;
 import controller.OrderHeaderHandler;
 import controller.ProductHandler;
 import javafx.geometry.Insets;
@@ -21,13 +22,15 @@ import model.Courier;
 import model.Customer;
 import model.OrderHeader;
 
-public class AdminOrderList extends GridPane{
+public class AdminOrderListPage extends GridPane{
 	private AdminHomePage parent;
 	private Admin admin;
 	private OrderHeaderHandler orderHandler = new OrderHeaderHandler();
 	private ProductHandler productHandler = new ProductHandler();
+	private DeliveryHandler deliveryHandler = new DeliveryHandler();
+	private CourierHandler courierHanlder = new CourierHandler();
 	
-	public AdminOrderList(AdminHomePage parent, Admin admin) {
+	public AdminOrderListPage(AdminHomePage parent, Admin admin) {
 		super();
 		this.parent = parent;
 		this.admin = admin;
@@ -60,10 +63,12 @@ public class AdminOrderList extends GridPane{
 			Label dateLbl = new Label(orderHeader.getOrderedAt().toString());
 			Label amountLbl = new Label(String.valueOf(orderHeader.getTotalAmount()));
 			Label statusLbl = new Label(orderHeader.getStatus());
-			Label courierLbl = new Label(orderHeader.getCourierId());
 			
+			String idCourier = courierHanlder.getCourier(idLbl.getText());
+			
+			Label courierLbl = new Label(idCourier);
 			Button detailBtn = new Button("Details");
-			Button assignCourier = new Button("Assign Courier");
+			Button assignCourierBtn = new Button("Assign Courier");
 			
 			add(idLbl, 0, row);
 			add(custLbl, 1, row);
@@ -72,14 +77,19 @@ public class AdminOrderList extends GridPane{
             add(statusLbl, 4, row);
             add(detailBtn, 5, row);
             add(courierLbl, 6, row);
-            add(assignCourier, 7, row);
+            
+            if(statusLbl.getText().equals("Pending")) {
+            	add(assignCourierBtn, 7, row);
+            	
+            }
+            
             
             detailBtn.setOnAction(e-> {
             	parent.setCenter(new AdminOrderDetailPage(parent,admin,orderHeader));
             });
             
             //Assign Courier
-            assignCourier.setOnAction(e -> {
+            assignCourierBtn.setOnAction(e -> {
             	CourierHandler courierHandler = new CourierHandler();
                 ArrayList<Courier> couriers = courierHandler.getAllCouriers();
                 
@@ -112,11 +122,12 @@ public class AdminOrderList extends GridPane{
                 
                 dialog.showAndWait().ifPresent(selectedCourier -> {
                 	if(selectedCourier != null) {
-                		courierHandler.assignCourier(orderHeader.getIdOrder(), selectedCourier.getIdUser());
+                		deliveryHandler.assignCourierToOrder(orderHeader.getIdOrder(), selectedCourier.getIdUser());
+                		courierHandler.assignCourier(orderHeader.getIdOrder());
                 		Alert done = new Alert(Alert.AlertType.INFORMATION, 
                                 "Courier " + selectedCourier.getFullname() + " assigned!");
                             done.show();
-                            parent.setCenter(new AdminOrderList(parent, admin));
+                            parent.setCenter(new AdminOrderListPage(parent, admin));
                 	}
                 });    
             });

@@ -10,44 +10,54 @@ import utils.Connect;
 
 public class PromoDA {
 
+    // Mengambil koneksi database
 	private Connection conn = Connect.getInstance().getConn();
-	
+
+    
+    // Mengambil semua promo
 	public ArrayList<Promo> getAllPromos() {
 		ArrayList<Promo> promos = new ArrayList<>();
 		String query = "SELECT * FROM promo";
-		
+
 		try {
 			PreparedStatement st = conn.prepareStatement(query);
 			ResultSet rs = st.executeQuery();
+
+            // Looping hasil query dan masukkan ke list
 			while(rs.next()) {
-				String idPromo = rs.getString("idPromo");
-				String code = rs.getString("code");
-				String headline = rs.getString("headline");
-				double discountPercentage = rs.getDouble("discountPercentage");
-				promos.add(new Promo(idPromo, code, headline, discountPercentage));
+				promos.add(new Promo(
+                        rs.getString("idPromo"),
+                        rs.getString("code"),
+                        rs.getString("headline"),
+                        rs.getDouble("discountPercentage")));
 			}	
 		} catch (SQLException e) {
-			e.printStackTrace();
+			e.printStackTrace(); // Tangani exception SQL
 		}
-		return promos;
+		return promos; // Kembalikan list promo
 	}
-	
+
+    
+    // Mengambil promo berdasarkan kode
 	public Promo getPromo(String code) {
 		String query = "SELECT * FROM promo WHERE code = ?";
-		
+
 		try {
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, code);
 			ResultSet rs = ps.executeQuery();
-			
+
+            // Jika ditemukan, kembalikan sebagai objek Promo
 			if(rs.next()) {
-				return new Promo(rs.getString("idPromo"), rs.getString("code"),rs.getString("headline"), rs.getDouble("discountPercentage"));
+				return new Promo(
+                        rs.getString("idPromo"),
+                        rs.getString("code"),
+                        rs.getString("headline"),
+                        rs.getDouble("discountPercentage"));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace(); // Tangani exception SQL
 		}
-		return null;
+		return null; // Return null jika tidak ditemukan
 	}
-	
 }

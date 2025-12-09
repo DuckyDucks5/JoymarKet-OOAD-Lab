@@ -39,13 +39,16 @@ public class AdminOrderListPage extends GridPane{
         setVgap(10);
         setHgap(20);
 		
+        // Ambil semua order dari customer
         ArrayList<OrderHeader> orders = orderHandler.getAllCustomerOrders();
             
-        if(orders .isEmpty()) {
+        // Jika tidak ada order, tampilkan pesan
+        if(orders.isEmpty()) {
         	add(new Label("No Order Available"), 0, 0);
             return;
         }
         
+        // Tambahkan header kolom
         add(new Label("Order ID"), 0, 0);
         add(new Label("Customer ID"), 1, 0);
         add(new Label("Date"), 2, 0);
@@ -57,6 +60,7 @@ public class AdminOrderListPage extends GridPane{
         
         int row = 1;
         
+        // Looping untuk menampilkan setiap order
         for (OrderHeader orderHeader : orders) {
 			Label idLbl = new Label(orderHeader.getIdOrder());
 			Label custLbl = new Label(orderHeader.getIdCustomer());
@@ -64,12 +68,14 @@ public class AdminOrderListPage extends GridPane{
 			Label amountLbl = new Label(String.valueOf(orderHeader.getTotalAmount()));
 			Label statusLbl = new Label(orderHeader.getStatus());
 			
+			// Ambil courier yang ditugaskan ke order ini
 			String idCourier = courierHanlder.getCourier(idLbl.getText());
 			
 			Label courierLbl = new Label(idCourier);
 			Button detailBtn = new Button("Details");
 			Button assignCourierBtn = new Button("Assign Courier");
 			
+			// Tambahkan elemen ke GridPane
 			add(idLbl, 0, row);
 			add(custLbl, 1, row);
             add(dateLbl, 2, row);
@@ -78,33 +84,34 @@ public class AdminOrderListPage extends GridPane{
             add(detailBtn, 5, row);
             add(courierLbl, 6, row);
             
+            // Tampilkan tombol assign courier hanya jika status Pending
             if(statusLbl.getText().equals("Pending")) {
             	add(assignCourierBtn, 7, row);
-            	
             }
             
-            
+            // Action untuk tombol Detail
             detailBtn.setOnAction(e-> {
             	parent.setCenter(new AdminOrderDetailPage(parent,admin,orderHeader));
             });
             
-            //Assign Courier
+            // Action untuk tombol Assign Courier
             assignCourierBtn.setOnAction(e -> {
             	CourierHandler courierHandler = new CourierHandler();
                 ArrayList<Courier> couriers = courierHandler.getAllCouriers();
                 
+                // Jika tidak ada courier, tampilkan alert
                 if(couriers.isEmpty()) {
                     Alert alert = new Alert(Alert.AlertType.WARNING, "No couriers available.");
                     alert.show();
                     return;
                 }
                 
-                // Create dialog
+                // Buat dialog pemilihan courier
                 Dialog<Courier> dialog = new Dialog<>();
                 dialog.setTitle("Assign Courier");
                 dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
                 
-                //ComboBox
+                // Tambahkan ComboBox untuk memilih courier
                 ComboBox<Courier> courierBox = new ComboBox<Courier>();
                 courierBox.getItems().addAll(couriers);
                 courierBox.setPromptText("Select Courier");
@@ -120,14 +127,16 @@ public class AdminOrderListPage extends GridPane{
                     return null;
                 });
                 
+                // Jika courier dipilih, lakukan assignment
                 dialog.showAndWait().ifPresent(selectedCourier -> {
                 	if(selectedCourier != null) {
                 		deliveryHandler.assignCourierToOrder(orderHeader.getIdOrder(), selectedCourier.getIdUser());
                 		courierHandler.assignCourier(orderHeader.getIdOrder());
                 		Alert done = new Alert(Alert.AlertType.INFORMATION, 
                                 "Courier " + selectedCourier.getFullname() + " assigned!");
-                            done.show();
-                            parent.setCenter(new AdminOrderListPage(parent, admin));
+                        done.show();
+                        // Refresh halaman order
+                        parent.setCenter(new AdminOrderListPage(parent, admin));
                 	}
                 });    
             });

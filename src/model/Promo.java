@@ -1,6 +1,7 @@
 package model;
 
 public class Promo {
+	//Atribut yang dibutuhkan
 	private String idPromo;
 	private String code;
 	private String headline;

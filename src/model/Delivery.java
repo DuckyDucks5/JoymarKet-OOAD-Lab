@@ -1,9 +1,11 @@
 package model;
 
 public class Delivery {
+	//Atribut yang dibutuhkan
 	private String idOrder;
 	private String idCourier;
 	private String status;
+	
 	public Delivery(String idOrder, String idCourier, String status) {
 		super();
 		this.idOrder = idOrder;

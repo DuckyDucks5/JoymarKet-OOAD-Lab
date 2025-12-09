@@ -1,6 +1,7 @@
 package model;
 
 public class Admin extends User {
+	//Atribut yang dibutuhkan
 	private String emergencyContact;
 
 	public Admin(String idUser, String fullName, String email, String password, String phone, String address,

@@ -27,6 +27,7 @@ public class CustProductListPage extends GridPane{
         setVgap(10);
         setHgap(20);
         
+        // Tambahkan header tabel
         Label nameLbl = new Label("Name");
         Label priceLbl = new Label("Price");
         Label stockLbl = new Label("Stock");
@@ -39,6 +40,7 @@ public class CustProductListPage extends GridPane{
         add(categoryLbl, 3, 0);
         add(buttonLbl, 4, 0);
         
+        // Ambil semua produk yang tersedia
         ArrayList<Product> products = handler.getAvailableProducts();
         
         int row = 1;
@@ -55,12 +57,14 @@ public class CustProductListPage extends GridPane{
             add(category, 3, row);
             add(addToCartBtn, 4, row);
             
+            // Action tombol Add to Cart
             addToCartBtn.setOnAction(e ->{
             	TextField countField = new TextField("1");
             	Button storeBtn = new Button("Store");
             	Button cancelBtn = new Button("Cancel");
             	Label quantityLbl = new Label("Quantity");
             	
+            	// Tampilkan field input jumlah dan tombol Store/Cancel
             	this.getChildren().remove(buttonLbl);
             	add(quantityLbl,4,0);
             	add(buttonLbl,5,0);
@@ -69,6 +73,7 @@ public class CustProductListPage extends GridPane{
             	add(countField, 4,getRowIndex(storeBtn));
             	add(cancelBtn, 6, getRowIndex(countField));
             	
+            	// Action tombol Store untuk menyimpan ke cart
             	storeBtn.setOnAction(ev -> {
             		String input = countField.getText();
 
@@ -86,6 +91,7 @@ public class CustProductListPage extends GridPane{
         					return;
             			}
             			
+            			// Tambahkan item ke cart
             			CartItemHandler handler = new CartItemHandler();
             			boolean success = handler.createCartItem(customer.getIdUser(), p.getIdProduct(), count);
             			
@@ -95,6 +101,7 @@ public class CustProductListPage extends GridPane{
         				else {
         					showAlert("Error", "Failed to add the product to the cart. Please try again.", AlertType.ERROR);
         				}
+        				// Refresh halaman produk
         				parent.setCenter(new CustProductListPage(parent, customer));
             		}catch(NumberFormatException e2) {
             			showAlert("Error", "Quantity must be numeric!", AlertType.ERROR);
@@ -102,6 +109,7 @@ public class CustProductListPage extends GridPane{
             		}
             	});
             	
+            	// Action tombol Cancel untuk membatalkan input jumlah
             	cancelBtn.setOnAction(ev -> {
             		parent.setCenter(new CustProductListPage(parent, customer));
             	});
@@ -110,10 +118,9 @@ public class CustProductListPage extends GridPane{
             
             row++;
         }
-        
-        
 	}
 	
+	// Method untuk menampilkan Alert
 	private void showAlert(String title, String message, AlertType type) {
 		Alert alert = new Alert(type);
 		alert.setTitle(title);

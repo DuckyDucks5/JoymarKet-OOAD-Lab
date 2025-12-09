@@ -1,6 +1,7 @@
 package model;
 
 public class User {
+	//Atribut yang dibutuhkan
 	private String idUser;
 	private String fullName;
 	private String email;

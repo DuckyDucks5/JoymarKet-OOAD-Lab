@@ -7,20 +7,24 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
+import main.Main;
 import model.Customer;
 
 public class CustomerHomePage extends BorderPane {
 	private Customer customer;
-
+	
 	public CustomerHomePage(Customer customer) {
+		this.customer = customer;
+		
 		Button productListBtn = new Button("Product List");
 		Button cartBtn = new Button("Cart");
 		Button orderListBtn = new Button("Order List");
 		Button orderHistoryBtn = new Button("Order History");
 		Button topUpBtn = new Button("Top Up");
 		Button editProfileBtn = new Button("Edit Profile");
+		Button logOutBtn = new Button("Log Out");
 
-		HBox navBar = new HBox(10, productListBtn, cartBtn, orderListBtn, orderHistoryBtn, topUpBtn, editProfileBtn);
+		HBox navBar = new HBox(10, productListBtn, cartBtn, orderListBtn, orderHistoryBtn, topUpBtn, editProfileBtn, logOutBtn);
 		navBar.setAlignment(Pos.CENTER_RIGHT);
 		navBar.setPadding(new Insets(15));
 
@@ -53,7 +57,11 @@ public class CustomerHomePage extends BorderPane {
 		});
 
 		editProfileBtn.setOnAction(e -> {
-	        this.setCenter(new CustEditProfilePage(customer));
+	        this.setCenter(new UserEditProfilePage(customer));
 		});
+		logOutBtn.setOnAction(e -> {
+		    Main.changeScene(new LoginPage());
+		});
+
 	}
 }

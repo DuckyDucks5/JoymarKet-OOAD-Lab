@@ -1,7 +1,7 @@
 package model;
 
 public class Courier extends User{
-	
+	//Atribut yang dibutuhkan
 	private String vehicleType;
 	private String vehiclePlate;
 	

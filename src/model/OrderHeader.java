@@ -3,14 +3,14 @@ package model;
 import java.sql.Timestamp;
 
 public class OrderHeader {
-	
+	//Atribut yang dibutuhkan
 	private String idOrder;
     private String idCustomer;
     private String idPromo;
     private String status;
-//    private String courierId;
     private Timestamp orderedAt;
     private double totalAmount;
+    
 	public OrderHeader(String idOrder, String idCustomer, String idPromo, String status,
 			Timestamp orderedAt, double totalAmount) {
 		super();
@@ -21,6 +21,7 @@ public class OrderHeader {
 		this.orderedAt = orderedAt;
 		this.totalAmount = totalAmount;
 	}
+	
 	public String getIdOrder() {
 		return idOrder;
 	}

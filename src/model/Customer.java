@@ -1,6 +1,7 @@
 package model;
 
 public class Customer extends User {
+	//Atribut yang dibutuhkan
     private double balance;
 
     public Customer(String idUser, String fullName, String email, String password,

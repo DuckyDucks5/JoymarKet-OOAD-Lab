@@ -31,6 +31,9 @@ public class CustCartPage extends GridPane {
 	
 	private double grandTotalToPay; 
     private Promo appliedPromo = null;
+    private Label afterDiscLbl;
+    private Label grandTotalLbl;
+    private Label descPromoLbl;
 	
 	public CustCartPage(CustomerHomePage parent, Customer customer) {
 		this.parent = parent;
@@ -45,14 +48,17 @@ public class CustCartPage extends GridPane {
 		setVgap(10);
 		setHgap(20);
 		
+		// Ambil semua item di cart customer
 		ArrayList<CartItem> items = cartItemHandler.getCartItems(customer.getIdUser());
         
+        // Jika cart kosong, tampilkan pesan
         if (items == null || items.isEmpty()) {
             Label emptyLbl = new Label("No Cart Item Available");
             add(emptyLbl,0,0);
             return;
         }
 		
+        // Tambahkan header tabel
 		Label nameLbl = new Label("Name");
         Label priceLbl = new Label("Price");
         Label quantityLbl = new Label("Quantity");
@@ -62,17 +68,17 @@ public class CustCartPage extends GridPane {
         TextField codePromoTF = new TextField();
         Button enterCodePromoBtn = new Button("Enter");
         Button checkOutBtn = new Button("Check Out");
-		
+        
         add(nameLbl, 0, 0);
         add(priceLbl, 1, 0);
         add(quantityLbl, 2, 0);
         add(subtotalLbl, 3, 0);
         add(buttonLbl, 4, 0);
         
-        
         int row = 1;
         double totalOrder = 0;
         
+        // Loop untuk menampilkan setiap item di cart
         for(CartItem item : items) {
         	Product p = productHandler.getProduct(item.getIdProduct());
         	Label name = new Label(p.getName());
@@ -92,12 +98,14 @@ public class CustCartPage extends GridPane {
         	add(editBtn,4,row);
         	add(removeBtn,5,row);
         	
+        	// Action tombol Edit untuk update jumlah item
         	editBtn.setOnAction(e -> {
         		TextField countField = new TextField(quantity.getText());
             	Button updateBtn = new Button("Update");
             	Button cancelBtn = new Button("Cancel");
                 Label currentStockLbl = new Label("Current Stock: " + p.getStock());
             	
+            	// Replace label quantity dan tombol dengan field edit
             	this.getChildren().remove(quantity);
             	add(countField,2,getRowIndex(editBtn));
             	this.getChildren().remove(buttonLbl);
@@ -110,7 +118,7 @@ public class CustCartPage extends GridPane {
             	add(cancelBtn,4,getRowIndex(updateBtn));
             	add(currentStockLbl,5,getRowIndex(cancelBtn));
             	
-            	
+            	// Action tombol Update untuk simpan perubahan jumlah
             	updateBtn.setOnAction(ev -> {
             		String input = countField.getText();
 
@@ -136,6 +144,7 @@ public class CustCartPage extends GridPane {
         				else {
         					showAlert("Error", "Failed to update the cart. Please try again.", AlertType.ERROR);
         				}
+        				// Refresh halaman cart
         				parent.setCenter(new CustCartPage(parent, customer));
             		}catch(NumberFormatException e2) {
             			showAlert("Error", "Quantity must be numeric!", AlertType.ERROR);
@@ -143,11 +152,13 @@ public class CustCartPage extends GridPane {
             		}
             	});
             	
+            	// Action tombol Cancel untuk membatalkan edit
             	cancelBtn.setOnAction(ev -> {
             		parent.setCenter(new CustCartPage(parent, customer));
             	});
         	});
         	
+        	// Action tombol Remove untuk hapus item dari cart
         	removeBtn.setOnAction(e -> {
         		boolean success = cartItemHandler.deleteCartItem(item.getIdCustomer(),item.getIdProduct());
     			
@@ -163,7 +174,7 @@ public class CustCartPage extends GridPane {
         	row++;
         }
         
-        //jika tidak pakai promo, maka grand total sama dengan total order
+        // Jika tidak ada promo, grand total sama dengan total order
         this.grandTotalToPay = totalOrder;
         
         final double finalTotalOrder = totalOrder; 
@@ -177,43 +188,46 @@ public class CustCartPage extends GridPane {
         add(enterCodePromoBtn,7,finalRow+5);
         add(checkOutBtn,6,finalRow+6);
         
-        
-        
+        // Action tombol Enter untuk redeem promo
         enterCodePromoBtn.setOnAction(e -> {
         	String codePromoStr = codePromoTF.getText();
         	Promo promo = promoHandler.getPromo(codePromoStr);
+        	
+        	// Hapus label promo sebelumnya jika ada
+            if (afterDiscLbl != null) getChildren().remove(afterDiscLbl);
+            if (grandTotalLbl != null) getChildren().remove(grandTotalLbl);
+            if (descPromoLbl != null) getChildren().remove(descPromoLbl);
+            
         	if(promo==null) {
         		this.appliedPromo = null;
         		showAlert("Error", "Invalid Code Promo", AlertType.ERROR);
         	}else {
         		double discountRate = promo.getDiscountPercentage(); 
-        	    // Hitung potongan
         	    double discountAmount = finalTotalOrder * discountRate;
         	    
-        	    // Hitung total akhir
+        	    // Hitung grand total setelah diskon
         	    this.grandTotalToPay = finalTotalOrder - discountAmount;
         	    this.appliedPromo = promo; 
-        		Label afterDiscLbl = new Label("Discount: " + discountAmount);
-        		Label grandTotalLbl = new Label("Grand Total: " + this.grandTotalToPay);
-        		Label descPromoLbl = new Label(promo.getHeadline());
+        	    
+        	    // Tampilkan label promo dan grand total baru
+                afterDiscLbl = new Label("Discount: " + discountAmount);
+                grandTotalLbl = new Label("Grand Total: " + this.grandTotalToPay);
+                descPromoLbl = new Label(promo.getHeadline());
         		
         		add(afterDiscLbl,5,finalRow+3);
         		add(grandTotalLbl,5,finalRow+4);
         		add(descPromoLbl,5,finalRow+2);
         		
         		showAlert("Success", "Code Promo has been successfully redeemed", AlertType.INFORMATION);
-        		
         	}
         });
         
-        
-        
+        // Action tombol Check Out
         checkOutBtn.setOnAction(e -> {
-        	//Validasi Saldo
-            double currentBalance = customer.getBalance();
+        	double currentBalance = customer.getBalance();
             
+            // Validasi saldo customer
             if (currentBalance < this.grandTotalToPay) {
-                // Jika saldo kurang
                 showAlert("Insufficient Balance", 
                           "Your balance is " + currentBalance + ", but total is " + this.grandTotalToPay, 
                           AlertType.ERROR);
@@ -224,6 +238,8 @@ public class CustCartPage extends GridPane {
             if (this.appliedPromo != null) {
                 idPromoToUse = this.appliedPromo.getIdPromo();
             }
+            
+            // Checkout order
             boolean success = orderHeaderHandler.checkout(customer.getIdUser(),idPromoToUse);
 			
 			if(success) {
@@ -234,11 +250,13 @@ public class CustCartPage extends GridPane {
 				showAlert("Error", "Failed to Order. Please try again.", AlertType.ERROR);
 			}
 
+            // Refresh halaman cart
             parent.setCenter(new CustCartPage(parent, customer));
         });
         
 	}
 	
+	// Method untuk menampilkan Alert
 	private void showAlert(String title, String message, AlertType type) {
 		Alert alert = new Alert(type);
 		alert.setTitle(title);

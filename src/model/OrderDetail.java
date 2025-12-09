@@ -1,7 +1,7 @@
 package model;
 
 public class OrderDetail {
-	
+	//Atribut yang dibutuhkan
 	private String idOrder;
     private String idProduct;
     private int qty;

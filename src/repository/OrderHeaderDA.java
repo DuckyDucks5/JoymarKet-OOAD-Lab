@@ -10,9 +10,11 @@ import utils.Connect;
 
 public class OrderHeaderDA {
 
+    // Mengambil koneksi database
     private Connection conn = Connect.getInstance().getConn();
 
-    // CREATE ORDER HEADER
+    
+    // Menambahkan order baru
     public boolean createOrderHeader(OrderHeader order) {
         try {
             String query = "INSERT INTO order_header "
@@ -23,20 +25,21 @@ public class OrderHeaderDA {
             ps.setString(1, order.getIdOrder());
             ps.setString(2, order.getIdCustomer());
             ps.setString(3, order.getIdPromo());   
-            ps.setString(5, order.getStatus());
-//            ps.setString(4, order.getCourierId()); 
-            ps.setTimestamp(6, order.getOrderedAt());
-            ps.setDouble(7, order.getTotalAmount());
+            ps.setString(4, order.getStatus());
+            ps.setTimestamp(5, order.getOrderedAt());
+            ps.setDouble(6, order.getTotalAmount());
 
+            // Eksekusi insert dan kembalikan hasil
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Tangani exception
             return false;
         }
     }
 
-    // GENERATE ORDER ID
+    
+    // Mengenerate ID order baru unik
     public String generateOrderID() {
         try {
             int num = 1;
@@ -47,16 +50,17 @@ public class OrderHeaderDA {
                 ps.setString(1, id);
 
                 ResultSet rs = ps.executeQuery();
-                if (!rs.next()) return id;
+                if (!rs.next()) return id; // Return jika ID belum ada
                 num++;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Tangani exception
         }
         return null;
     }
 
-    // GET ONE ORDER HEADER
+    
+    // Mengambil satu order berdasarkan ID
     public OrderHeader getOrderHeader(String orderId) {
         try {
             String query = "SELECT * FROM order_header WHERE idOrder = ?";
@@ -70,18 +74,18 @@ public class OrderHeaderDA {
                         rs.getString("idCustomer"),
                         rs.getString("idPromo"),
                         rs.getString("status"),
-                    
                         rs.getTimestamp("ordered_at"),     
                         rs.getDouble("total_amount"));     
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Tangani exception
         }
         return null;
     }
 
-    // GET ALL ORDERS OF CUSTOMER
+    
+    // Mengambil semua order milik customer tertentu
     public ArrayList<OrderHeader> getCustomerOrders(String idCustomer) {
         ArrayList<OrderHeader> list = new ArrayList<>();
 
@@ -92,24 +96,25 @@ public class OrderHeaderDA {
 
             ResultSet rs = ps.executeQuery();
 
+            // Looping hasil query dan masukkan ke list
             while (rs.next()) {
                 list.add(new OrderHeader(
                         rs.getString("idOrder"),
                         rs.getString("idCustomer"),
                         rs.getString("idPromo"),
                         rs.getString("status"),
-                      
                         rs.getTimestamp("ordered_at"),
                         rs.getDouble("total_amount")));
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Tangani exception
         }
-        return list;
+        return list; // Kembalikan list order
     }
 
-    // GET ALL ORDERS
+    
+    // Mengambil seluruh order
     public ArrayList<OrderHeader> getAllCustomerOrders() {
         ArrayList<OrderHeader> list = new ArrayList<>();
 
@@ -119,36 +124,39 @@ public class OrderHeaderDA {
 
             ResultSet rs = ps.executeQuery();
 
+            // Looping semua hasil dan masukkan ke list
             while (rs.next()) {
                 list.add(new OrderHeader(
                         rs.getString("idOrder"),
                         rs.getString("idCustomer"),
                         rs.getString("idPromo"),        
                         rs.getString("status"),
-
                         rs.getTimestamp("ordered_at"),
                         rs.getDouble("total_amount")));
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Tangani exception
         }
-        return list;
+        return list; // Kembalikan list order
     }
 
-    // UPDATE STATUS ORDER
+    
+    // Mengupdate status order
     public boolean updateStatus(String idOrder, String status) {
         try {
             String query = "UPDATE order_header SET status = ? WHERE idOrder = ?";
             PreparedStatement ps = conn.prepareStatement(query);
 
+            // Set status dan ID order
             ps.setString(1, status);
             ps.setString(2, idOrder);
 
+            // Eksekusi update dan kembalikan hasil
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Tangani exception
             return false;
         }
     }

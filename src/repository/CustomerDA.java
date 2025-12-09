@@ -7,37 +7,27 @@ import utils.Connect;
 
 public class CustomerDA {
 
+    // Mengambil koneksi database
     private Connection conn = Connect.getInstance().getConn();
 
+    
+    // Menyimpan/Update saldo customer
     public boolean saveDA(Customer customer) {
         try {
             String query = "UPDATE users SET balance = ? WHERE idUser = ?";
             PreparedStatement ps = conn.prepareStatement(query);
+
+            // Set nilai balance dan ID customer
             ps.setDouble(1, customer.getBalance());
             ps.setString(2, customer.getIdUser());
 
+            // Eksekusi update dan kembalikan hasil
             return ps.executeUpdate() > 0;
             
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Tangani exception
             return false;
         }
     }
-    
-    public boolean updateProfileDA(Customer customer) {
-        try {
-            String query = "UPDATE users SET fullName = ?, phone = ?, address = ? WHERE idUser = ?";
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, customer.getFullname());
-            ps.setString(2, customer.getPhone());
-            ps.setString(3, customer.getAddress());
-            ps.setString(4, customer.getIdUser());
-
-            return ps.executeUpdate() > 0;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+ 
 }

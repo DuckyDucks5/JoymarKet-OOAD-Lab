@@ -1,6 +1,7 @@
 package model;
 
 public class Product {
+	//Atribut yang dibutuhkan
 	private String idProduct;
 	private String name;
 	private double price;

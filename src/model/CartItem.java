@@ -2,6 +2,7 @@ package model;
 
 public class CartItem {
 
+	//Atribut yang dibutuhkan
 	private String idCustomer;
 	private String idProduct;
 	private int count;

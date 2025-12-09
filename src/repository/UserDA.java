@@ -11,9 +11,11 @@ import utils.Connect;
 
 public class UserDA {
 
+    // Mengambil koneksi database
     private Connection conn = Connect.getInstance().getConn();
 
-    //REGISTER CUSTOMER
+    
+    // Menambahkan customer baru (Register)
     public Customer insertCustomer(Customer customer) {
         try {
             String query = "INSERT INTO users (idUser, fullName, email, password, phone, address, balance, role) "
@@ -31,18 +33,19 @@ public class UserDA {
 
             int affected = ps.executeUpdate();
             if (affected > 0) {
-                return customer;
+                return customer; // Kembalikan objek customer jika berhasil
             } else {
                 return null;
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Tangani exception
             return null;
         }
     }
+
     
-    //GENERATE MANUAL ID CUSTOMER
+    // Mengenerate ID customer manual
     public String generateCustomerID() {
         try {
             int num = 1;
@@ -54,18 +57,18 @@ public class UserDA {
 
                 ResultSet rs = ps.executeQuery();
                 if (!rs.next()) {
-                    return id;
+                    return id; // Return jika ID belum ada
                 }
                 num++;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Tangani exception
         }
         return null;
     }
 
     
-    //Find Email Password for Login Validate
+    // Validasi login berdasarkan email dan password
     public User findByEmailAndPassword(String email, String password) {
         try {
             String query = "SELECT * FROM users WHERE email = ? AND password = ?";
@@ -75,7 +78,7 @@ public class UserDA {
 
             ResultSet rs = ps.executeQuery();
 
-            if (!rs.next()) return null;
+            if (!rs.next()) return null; // Return null jika tidak ditemukan
 
             String id = rs.getString("idUser");
             String fullname = rs.getString("fullName");
@@ -87,22 +90,23 @@ public class UserDA {
             String vehicleType = rs.getString("vehicleType");
             String vehiclePlate = rs.getString("vehiclePlate");
 
+            // Return objek sesuai role
             if (role.equalsIgnoreCase("admin")) {
                 return new Admin(id, fullname, email, password, phone, address, emergency);
-            }
-            else if (role.equalsIgnoreCase("courier")) {
-            	return new Courier(id, fullname, email, phone, address, vehicleType, vehiclePlate);
+            } else if (role.equalsIgnoreCase("courier")) {
+                return new Courier(id, fullname, email, phone, address, vehicleType, vehiclePlate);
             }
 
             return new Customer(id, fullname, email, password, phone, address, balance);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Tangani exception
             return null;
         }
     }
+
     
-    //UPDATE BALANCE CUSTOMER
+    // Mengupdate balance customer
     public boolean updateBalance(String idUser, double newBalance) {
         try {
             String query = "UPDATE users SET balance = ? WHERE idUser = ?";
@@ -113,7 +117,26 @@ public class UserDA {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Tangani exception
+            return false;
+        }
+    }
+
+    
+    // Mengupdate profil user
+    public boolean updateProfileDA(User user) {
+        try {
+            String query = "UPDATE users SET fullName = ?, phone = ?, address = ? WHERE idUser = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, user.getFullname());
+            ps.setString(2, user.getPhone());
+            ps.setString(3, user.getAddress());
+            ps.setString(4, user.getIdUser());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Tangani exception
             return false;
         }
     }

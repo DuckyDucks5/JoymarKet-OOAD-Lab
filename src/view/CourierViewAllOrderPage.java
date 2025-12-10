@@ -6,6 +6,7 @@ import controller.OrderHeaderHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -111,8 +112,13 @@ public class CourierViewAllOrderPage extends VBox {
 
 			// Event handler tombol detail
 			detailBtn.setOnAction(e -> {
-				// Navigasi ke halaman detail order
-				parent.setCenter(new CourierViewDetailAllOrderPage(parent, oh));
+				// Navigasi ke halaman detail order dengan scroll pane
+				ScrollPane scroll = new ScrollPane(new CourierViewDetailAllOrderPage(parent, oh, courier));
+				scroll.setFitToWidth(true);
+				scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+				scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+				parent.setCenter(scroll);
 			});
 
 			row.add(detailBtn, 4, 0);

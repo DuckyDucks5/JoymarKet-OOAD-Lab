@@ -11,7 +11,7 @@ public class RegisterPage extends BorderPane {
 
     public RegisterPage() {
 
-        // Buat form utama menggunakan GridPane
+        // Grid utama untuk form input
         GridPane form = new GridPane();
         form.setVgap(15);
         form.setHgap(10);
@@ -23,47 +23,65 @@ public class RegisterPage extends BorderPane {
         title.setFont(Font.font("Arial", 26));
         title.setStyle("-fx-font-weight: bold;");
 
-        // Input field
+        // Input Full Name
         Label nameLbl = new Label("Full Name");
         TextField nameTf = new TextField();
         nameTf.setPromptText("Enter your full name");
 
+        // Input Email
         Label emailLbl = new Label("Email");
         TextField emailTf = new TextField();
         emailTf.setPromptText("Enter your email");
 
+        // Input Password
         Label passLbl = new Label("Password");
         PasswordField passPf = new PasswordField();
         passPf.setPromptText("Enter password");
 
+        // Input Confirm Password
         Label confirmLbl = new Label("Confirm Password");
         PasswordField confirmPf = new PasswordField();
         confirmPf.setPromptText("Re-enter password");
 
+        // Input Phone
         Label phoneLbl = new Label("Phone");
         TextField phoneTf = new TextField();
         phoneTf.setPromptText("Enter phone number");
 
+        // Input Address
         Label addressLbl = new Label("Address");
         TextArea addressTa = new TextArea();
         addressTa.setPromptText("Enter your address");
         addressTa.setPrefRowCount(3);
 
-        // Tombol Submit dan Login
+        // Input Gender
+        Label genderLabel = new Label("Gender");
+
+        // RadioButton untuk pilihan gender
+        RadioButton maleRb = new RadioButton("Male");
+        RadioButton femaleRb = new RadioButton("Female");
+
+        ToggleGroup genderGroup = new ToggleGroup();
+        maleRb.setToggleGroup(genderGroup);
+        femaleRb.setToggleGroup(genderGroup);
+
+        HBox genderBox = new HBox(15, maleRb, femaleRb);
+        genderBox.setAlignment(Pos.CENTER_LEFT);
+
+        // Tombol Submit
         Button submitBtn = new Button("Submit");
         submitBtn.setPrefWidth(600);
-        submitBtn.setAlignment(Pos.CENTER);
         submitBtn.setStyle(
                 "-fx-background-color: #000000; -fx-text-fill: white; " +
-                        "-fx-font-size: 14px; -fx-padding: 10 20;");
+                "-fx-font-size: 14px; -fx-padding: 10 20;");
 
+        // Tombol ke halaman login
         Button loginBtn = new Button("Go to Login");
         loginBtn.setPrefWidth(600);
-        loginBtn.setAlignment(Pos.CENTER);
         loginBtn.setStyle(
                 "-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20;");
 
-        // Tambahkan semua elemen ke GridPane
+        // Tambahkan semua elemen ke GridPane 
         form.add(title, 0, 0, 2, 1);
         form.add(nameLbl, 0, 1);
         form.add(nameTf, 1, 1);
@@ -77,11 +95,15 @@ public class RegisterPage extends BorderPane {
         form.add(phoneTf, 1, 5);
         form.add(addressLbl, 0, 6);
         form.add(addressTa, 1, 6);
-        form.add(submitBtn, 0, 7, 2, 1);
-        form.add(loginBtn, 0, 8, 2, 1);
+        form.add(genderLabel, 0, 7);
+        form.add(genderBox, 1, 7);
+
+        // Tombol submit & login
+        form.add(submitBtn, 0, 8, 2, 1);
+        form.add(loginBtn, 0, 9, 2, 1);
         GridPane.setHalignment(title, javafx.geometry.HPos.CENTER);
 
-        // Bungkus form dalam VBox untuk card style
+        // Bungkus form dalam card
         VBox card = new VBox(form);
         card.setPadding(new Insets(30));
         card.setAlignment(Pos.CENTER);
@@ -92,11 +114,16 @@ public class RegisterPage extends BorderPane {
         this.setStyle("-fx-background-color: #f0f2f5;");
         BorderPane.setAlignment(card, Pos.CENTER);
 
-        // Action tombol Go to Login
+        // Action tombol login
         loginBtn.setOnAction(e -> getScene().setRoot(new LoginPage()));
 
-        // Action tombol Submit untuk registrasi
+        // Action tombol Submit
         submitBtn.setOnAction(e -> {
+
+            
+            String gender = maleRb.isSelected() ? "Male" :
+                            femaleRb.isSelected() ? "Female" : "";
+
             UserHandler controller = new UserHandler();
             String result = controller.registerAccount(
                     nameTf.getText(),
@@ -104,23 +131,21 @@ public class RegisterPage extends BorderPane {
                     passPf.getText(),
                     confirmPf.getText(),
                     phoneTf.getText(),
-                    addressTa.getText()
+                    addressTa.getText(),
+                    gender
             );
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
 
-            // Jika registrasi berhasil
             if ("SUCCESS".equals(result)) {
                 alert.setAlertType(Alert.AlertType.INFORMATION);
                 alert.setHeaderText("Success");
                 alert.setContentText("Account created successfully!");
                 alert.showAndWait();
 
-                // Kembali ke halaman Login
                 getScene().setRoot(new LoginPage());
             } else {
-                // Jika gagal, tampilkan pesan error
                 alert.setAlertType(Alert.AlertType.ERROR);
                 alert.setHeaderText("Registration Failed");
                 alert.setContentText(result);

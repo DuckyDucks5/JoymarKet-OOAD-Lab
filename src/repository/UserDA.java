@@ -18,8 +18,8 @@ public class UserDA {
     // Menambahkan customer baru (Register)
     public Customer insertCustomer(Customer customer) {
         try {
-            String query = "INSERT INTO users (idUser, fullName, email, password, phone, address, balance, role) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO users (idUser, fullName, email, password, phone, address, balance, role, gender) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, customer.getIdUser());
@@ -30,6 +30,7 @@ public class UserDA {
             ps.setString(6, customer.getAddress());
             ps.setDouble(7, customer.getBalance());
             ps.setString(8, "customer");
+            ps.setString(9, customer.getGender());
 
             int affected = ps.executeUpdate();
             if (affected > 0) {
@@ -86,6 +87,7 @@ public class UserDA {
             String address = rs.getString("address");
             String role = rs.getString("role");
             double balance = rs.getDouble("balance");
+            String gender = rs.getString("gender");
             String emergency = rs.getString("emergencyContact");
             String vehicleType = rs.getString("vehicleType");
             String vehiclePlate = rs.getString("vehiclePlate");
@@ -97,7 +99,7 @@ public class UserDA {
                 return new Courier(id, fullname, email, phone, address, vehicleType, vehiclePlate);
             }
 
-            return new Customer(id, fullname, email, password, phone, address, balance);
+            return new Customer(id, fullname, email, password, phone, address, balance, gender);
 
         } catch (Exception e) {
             e.printStackTrace(); // Tangani exception

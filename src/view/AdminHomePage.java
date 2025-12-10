@@ -38,25 +38,29 @@ public class AdminHomePage extends BorderPane {
 	    this.setTop(navBar);
 	    this.setCenter(title);
 	       
-	    // Event handler tombol untuk menampilkan halaman yang sesuai saat diklik
+	    // Event handler tombol untuk menampilkan halaman daftar produk
 	    productListCRUDBtn.setOnAction(e -> {
-	        this.setCenter(new ProductListPage()); // Menampilkan halaman daftar produk
+	        this.setCenter(new ProductListPage());
 	    });
 
+	    // Event handler tombol untuk menampilkan halaman daftar kurir
 	    courirPageBtn.setOnAction(e -> {
-	    	this.setCenter(new CourierListPage()); // Menampilkan halaman daftar kurir
+	    	this.setCenter(new CourierListPage()); 
 	    });
 	        
+	    // Event handler tombol untuk menampilkan halaman daftar order untuk admin
 	    orderPageBtn.setOnAction(e -> {
-	    	this.setCenter(new AdminOrderListPage(this, admin)); // Menampilkan halaman daftar order untuk admin
+	    	this.setCenter(new AdminOrderListPage(this, admin)); 
 	    });
 	        
+	    // Event handler tombol untuk menampilkan halaman edit profil admin
 	    editProfileBtn.setOnAction(e -> {
-	        this.setCenter(new UserEditProfilePage(admin)); // Menampilkan halaman edit profil admin
+	        this.setCenter(new UserEditProfilePage(admin)); 
 	    });
 	        
+	    // Event handler tombol untuk Logout dan kembali ke halaman login
 	    logOutBtn.setOnAction(e -> {
-	    	Main.changeScene(new LoginPage()); // Logout dan kembali ke halaman login
+	    	Main.changeScene(new LoginPage());
 	    });
 	}
 }

@@ -16,7 +16,7 @@ public class Main extends Application {
 		primaryStage.setTitle("JoymarKet");
 		
 		//start di GuestHomePage
-		primaryStage.setScene(new Scene(new GuestHomePage(), 800, 600));
+		primaryStage.setScene(new Scene(new GuestHomePage(), 1500, 750));
 		primaryStage.show();
 	}
 

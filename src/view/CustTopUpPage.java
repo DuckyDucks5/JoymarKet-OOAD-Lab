@@ -5,32 +5,40 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import model.Customer;
 
 public class CustTopUpPage extends GridPane {
-	private Customer customer;
+	private Customer customer; // menyimpan data customer yang sedang login
 	private Label balanceLbl;
 
 	public CustTopUpPage(Customer customer) {
 		this.customer = customer;
 
 		// Mengatur Layout GridPane
-		setVgap(10);
-		setHgap(10);
-		setPadding(new Insets(20));
+		setVgap(15);
+		setHgap(15);
+		setPadding(new Insets(25));
 		setAlignment(Pos.CENTER);
 
 		// Label Judul Halaman
 		Label title = new Label("Top Up Balance");
-		title.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+		title.setFont(Font.font("Arial", FontWeight.BOLD, 22));
 
 		// Label Untuk Menampilkan Saldo Saat Ini
 		balanceLbl = new Label("Current Balance: " + customer.getBalance());
+		balanceLbl.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+
 		Label amountLbl = new Label("Amount to Top Up");
+		amountLbl.setFont(Font.font("Arial", FontWeight.NORMAL, 14));
 		TextField amountTf = new TextField();
+		amountTf.setPrefWidth(150);
 
 		// Tombol Top Up
 		Button topUpBtn = new Button("Top Up");
+		topUpBtn.setStyle("-fx-background-color:#2563EB; -fx-text-fill:white; -fx-background-radius:5;");
+		topUpBtn.setPrefWidth(100);
 
 		// Menambahkan Komponen Ke GridPane
 		add(title, 0, 0, 2, 1);

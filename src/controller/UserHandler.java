@@ -11,7 +11,7 @@ public class UserHandler {
 	private UserDA userRepo = new UserDA();
 
 	// Register Dan Validasi Input User
-	public String registerAccount(String fullname, String email, String password, String confirm, String phone, String address){
+	public String registerAccount(String fullname, String email, String password, String confirm, String phone, String address, String gender){
 		StringBuilder sb = new StringBuilder();
 
 		// Validasi Full Name
@@ -49,6 +49,10 @@ public class UserHandler {
 		if (address.isEmpty()) {
 			sb.append("- Address must be filled.\n");
 		}
+		
+		if(gender.isEmpty()) {
+			sb.append("- Gender must be filled.\n");
+		}
 
 		// Jika Ada Error, Return Semua Pesan Error
 		if (sb.length() > 0) {
@@ -61,7 +65,7 @@ public class UserHandler {
 			String newId = userRepo.generateCustomerID();
 
 			// Buat Object Customer Baru
-			Customer customer = new Customer(newId, fullname, email, password, phone, address, 0);
+			Customer customer = new Customer(newId, fullname, email, password, phone, address, 0, gender);
 
 			// Simpan Customer Ke Database
 			Customer saved = userRepo.insertCustomer(customer);

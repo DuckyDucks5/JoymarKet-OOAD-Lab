@@ -14,6 +14,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import model.CartItem;
 import model.Customer;
 import model.Product;
@@ -21,13 +23,13 @@ import model.Promo;
 
 public class CustCartPage extends GridPane {
 
-	private CustomerHomePage parent;
-	private Customer customer;
-	private CartItemHandler cartItemHandler;
-	private ProductHandler productHandler;
-	private PromoHandler promoHandler;
-	private OrderHeaderHandler orderHeaderHandler;
-	private CustomerHandler customerHandler;
+	private CustomerHomePage parent; 
+	private Customer customer; //menyimpan data customer yang sedang login
+	private CartItemHandler cartItemHandler; // hanlder untuk mengambil atau mengubah data cart item
+	private ProductHandler productHandler; // Handler untuk mengambil atau mengubah data produk
+	private PromoHandler promoHandler; //Handler untuk mengambil atau mengubah data promo
+	private OrderHeaderHandler orderHeaderHandler; // handler untuk mengambil atau mengubah data order
+	private CustomerHandler customerHandler; //handler untuk mengambila tau mengubah data customer
 	
 	private double grandTotalToPay; 
     private Promo appliedPromo = null;
@@ -44,8 +46,8 @@ public class CustCartPage extends GridPane {
         orderHeaderHandler = new OrderHeaderHandler();
         customerHandler = new CustomerHandler();
 		
-		setPadding(new Insets(20));
-		setVgap(10);
+		setPadding(new Insets(25));
+		setVgap(15);
 		setHgap(20);
 		
 		// Ambil semua item di cart customer
@@ -54,20 +56,29 @@ public class CustCartPage extends GridPane {
         // Jika cart kosong, tampilkan pesan
         if (items == null || items.isEmpty()) {
             Label emptyLbl = new Label("No Cart Item Available");
+            emptyLbl.setFont(Font.font("Arial", FontWeight.BOLD, 16));
             add(emptyLbl,0,0);
             return;
         }
 		
         // Tambahkan header tabel
 		Label nameLbl = new Label("Name");
+        nameLbl.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         Label priceLbl = new Label("Price");
+        priceLbl.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         Label quantityLbl = new Label("Quantity");
+        quantityLbl.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         Label subtotalLbl = new Label("Subtotal");
+        subtotalLbl.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         Label buttonLbl = new Label("Button");
+        buttonLbl.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         Label codePromoLbl = new Label("Enter Your Code Promo: ");
+        codePromoLbl.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         TextField codePromoTF = new TextField();
         Button enterCodePromoBtn = new Button("Enter");
+        enterCodePromoBtn.setStyle("-fx-background-color:#2563EB; -fx-text-fill:white; -fx-background-radius:5;");
         Button checkOutBtn = new Button("Check Out");
+        checkOutBtn.setStyle("-fx-background-color:#2563EB; -fx-text-fill:white; -fx-background-radius:5;");
         
         add(nameLbl, 0, 0);
         add(priceLbl, 1, 0);
@@ -81,13 +92,16 @@ public class CustCartPage extends GridPane {
         // Loop untuk menampilkan setiap item di cart
         for(CartItem item : items) {
         	Product p = productHandler.getProduct(item.getIdProduct());
+        	
         	Label name = new Label(p.getName());
         	Label price = new Label(String.valueOf(p.getPrice()));
         	Label quantity = new Label(String.valueOf(item.getCount()));
         	double subtotal = p.getPrice() * item.getCount();
         	Label subTotal = new Label(String.valueOf(subtotal));
         	Button editBtn = new Button("Edit");
+        	editBtn.setStyle("-fx-background-color:#2563EB; -fx-text-fill:white; -fx-background-radius:5;");
         	Button removeBtn = new Button("Remove");
+        	removeBtn.setStyle("-fx-background-color:#EF4444; -fx-text-fill:white; -fx-background-radius:5;");
         	
         	totalOrder += subtotal;
         	
@@ -102,7 +116,9 @@ public class CustCartPage extends GridPane {
         	editBtn.setOnAction(e -> {
         		TextField countField = new TextField(quantity.getText());
             	Button updateBtn = new Button("Update");
+            	updateBtn.setStyle("-fx-background-color:#2563EB; -fx-text-fill:white; -fx-background-radius:5;");
             	Button cancelBtn = new Button("Cancel");
+            	cancelBtn.setStyle("-fx-background-color:#9CA3AF; -fx-text-fill:white; -fx-background-radius:5;");
                 Label currentStockLbl = new Label("Current Stock: " + p.getStock());
             	
             	// Replace label quantity dan tombol dengan field edit
@@ -122,6 +138,7 @@ public class CustCartPage extends GridPane {
             	updateBtn.setOnAction(ev -> {
             		String input = countField.getText();
 
+            		// cek input kosong
             	    if (input == null || input.trim().isEmpty()) {
             	        showAlert("Error", "Quantity must be filled!", AlertType.ERROR);
             	        return;
@@ -131,6 +148,7 @@ public class CustCartPage extends GridPane {
             		try {
             			count = Integer.parseInt(countField.getText());
             			
+            			// cek quantity harus sesuai dengan stok dan dimulai dari 1
             			if(count <= 0 || count > p.getStock()) {
             				showAlert("Error", "Quantity must be between 1 and available stock", AlertType.ERROR);
         					return;
@@ -181,6 +199,7 @@ public class CustCartPage extends GridPane {
         final int finalRow = row;
         
         Label totalOrderLbl = new Label("Total Order: " + totalOrder);
+        totalOrderLbl.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         
         add(totalOrderLbl,5,finalRow+1);
         add(codePromoLbl,5,finalRow+5);
@@ -213,6 +232,10 @@ public class CustCartPage extends GridPane {
                 afterDiscLbl = new Label("Discount: " + discountAmount);
                 grandTotalLbl = new Label("Grand Total: " + this.grandTotalToPay);
                 descPromoLbl = new Label(promo.getHeadline());
+                
+                afterDiscLbl.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+                grandTotalLbl.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+                descPromoLbl.setFont(Font.font("Arial", FontWeight.NORMAL, 13));
         		
         		add(afterDiscLbl,5,finalRow+3);
         		add(grandTotalLbl,5,finalRow+4);

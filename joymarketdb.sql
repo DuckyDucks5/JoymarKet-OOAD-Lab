@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 10, 2025 at 05:05 PM
+-- Generation Time: Dec 12, 2025 at 04:45 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -189,8 +189,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`idUser`, `fullName`, `email`, `password`, `phone`, `address`, `role`, `balance`, `emergencyContact`, `vehicleType`, `vehiclePlate`, `gender`) VALUES
 ('AD001', 'Auryn', 'auryn@gmail.com', 'admin123', '081234567890', 'Jakarta', 'admin', NULL, '021-9999', NULL, NULL, ''),
 ('AD002', 'Alicia', 'alicia@gmail.com', 'admin321', '081234567891', 'Jakarta', 'admin', NULL, '021-9998', NULL, NULL, ''),
-('CR001', 'Nicholas', 'nicholas@gmail.com', 'nic123', '081231232383', 'Kebon Jeruk', 'courier', 1000015000, NULL, 'cars', 'B 1010 ASD', ''),
-('CR002', 'Kevin ', 'kevin@gmail.com', 'kevin123', '0812345', 'kemanggisan', 'courier', NULL, NULL, 'Motor NMAX', 'B 4325 BS', ''),
+('CR001', 'Nicholas', 'nicholas@gmail.com', 'nic123', '081231232383', 'Kebon Jeruk', 'courier', 1000015000, NULL, 'Car', 'B 1010 ASD', ''),
+('CR002', 'Kevin ', 'kevin@gmail.com', 'kevin123', '0812345', 'kemanggisan', 'courier', NULL, NULL, 'Motorcycle', 'B 4325 BS', ''),
 ('CU001', 'Rosamond', 'rosa@gmail.com', 'rosa123', '082345678901', 'Bum', 'customer', 325000, NULL, NULL, NULL, 'Female'),
 ('CU002', 'Selina', 'selina@gmail.com', 'selsel123', '083456789012', 'Indonesia', 'customer', 10000, NULL, NULL, NULL, 'Female'),
 ('CU003', 'ryn', 'ryn@gmail.com', 'rynryn', '1234567890', 'jakut', 'customer', 97500, NULL, NULL, NULL, 'Female'),
